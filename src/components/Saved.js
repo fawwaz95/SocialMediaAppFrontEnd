@@ -1,69 +1,69 @@
 import { useEffect, useState } from 'react';
 
-const Homepage = () => {
+const Saved = () => {
     const [hoveredDesc, setHoveredDesc] = useState(null);
     const [contentIndex, setContentIndex] = useState(null); // Set initial state as null
 
     const content = [
         {
-            img: "images/coolHouse.webp",
+            img: "images/saved_SpikeLee.png",
             user: "user",
             desc: "Description One",
         },
         {
-            img: "images/coolHouse.webp",
+            img: "images/saved_TorontoBasketballCourt.jpg",
             user: "user",
             desc: "Description Two",
         },
         {
-            img: "images/coolHouse.webp",
+            img: "images/saved_AimeShirt.webp",
             user: "user",
             desc: "Description",
         },
         {
-            img: "images/coolHouse.webp",
+            img: "images/saved_SpikeLee.png",
+            user: "user",
+            desc: "Description One",
+        },
+        {
+            img: "images/saved_TorontoBasketballCourt.jpg",
+            user: "user",
+            desc: "Description Two",
+        },
+        {
+            img: "images/saved_AimeShirt.webp",
             user: "user",
             desc: "Description",
         },
         {
-            img: "images/coolHouse.webp",
+            img: "images/saved_SpikeLee.png",
+            user: "user",
+            desc: "Description One",
+        },
+        {
+            img: "images/saved_TorontoBasketballCourt.jpg",
+            user: "user",
+            desc: "Description Two",
+        },
+        {
+            img: "images/saved_AimeShirt.webp",
             user: "user",
             desc: "Description",
         },
         {
-            img: "images/coolHouse.webp",
+            img: "images/saved_SpikeLee.png",
             user: "user",
-            desc: "Description",
+            desc: "Description One",
         },
         {
-            img: "images/coolHouse.webp",
+            img: "images/saved_TorontoBasketballCourt.jpg",
             user: "user",
-            desc: "Description",
+            desc: "Description Two",
         },
         {
-            img: "images/coolHouse.webp",
+            img: "images/saved_AimeShirt.webp",
             user: "user",
             desc: "Description",
-        },
-        {
-            img: "images/coolHouse.webp",
-            user: "user",
-            desc: "Description",
-        },
-        {
-            img: "images/coolHouse.webp",
-            user: "user",
-            desc: "Description",
-        },
-        {
-            img: "images/coolHouse.webp",
-            user: "user",
-            desc: "Description",
-        },
-        {
-            img: "images/coolHouse.webp",
-            user: "user",
-            desc: "Description last",
         },
     ];
 
@@ -77,7 +77,7 @@ const Homepage = () => {
     return (
         <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-4 text-white p-4 pt-20">
             <div className="absolute text-xl top-10 left-4">
-                Home Feed
+                Explore Feed
             </div>
             {content.map((contentArray, index) => (
                 <div
@@ -86,8 +86,8 @@ const Homepage = () => {
                     onMouseEnter={() => setContentIndex(index)}
                     onMouseLeave={() => setHoveredDesc(null)}
                 >
-                    <img src={contentArray.img} className="h-48 w-full object-cover" alt="Content" />
-                    {contentIndex !== null && contentIndex === index &&  (
+                    <img src={contentArray.img} className="h-48 w-full object-cover" alt="Content"/>
+                    {contentIndex !== null && contentIndex === index && (
                         <div className="absolute inset-0 flex items-center justify-center">
                             <div>{contentArray.desc}</div>
                         </div>
@@ -116,4 +116,4 @@ const Homepage = () => {
     )
 }
 
-export default Homepage;
+export default Saved;
