@@ -57,13 +57,28 @@ const Profile = () => {
 
     return (
         <div>
-            <div className="absolute text-xl text-white top-4 left-50">
+            <div className="text-xl text-white pt-10 pl-4">
                 Profile
             </div>
-            <div className="absolute top-10">
-                <img src="images/profileImage_EmeraldGreen.webp" className="h-48 w-48 rounded-full"/>
+            <div className="flex flex-wrap justify-between pt-10 pr-20 pb-4 text-white"> {/*pt-4 pb-8 pr-12*/}
+                <img src="images/profileImage_EmeraldGreen.webp" className="h-24 w-24 sm:h-40 sm:w-40 rounded-full"/>
+                    <div>
+                        Posts
+                        <div> 10 </div>
+                    </div>
+                    <div>
+                        Followers
+                        <div> 10 </div>
+                    </div>
+                    <div>
+                        Following
+                        <div> 10 </div>
+                    </div>
             </div>
-            <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-4 text-white p-4 pt-80">
+            <div className="text-white text-center w-40">
+                User Name
+            </div>
+            <div className="relative grid grid-cols-3 sm:grid-cols-3 gap-4 text-white p-8"> {/*pt-80*/}
 
                 {content.map((contentArray, index) => (
                     <div
@@ -72,7 +87,7 @@ const Profile = () => {
                         onMouseEnter={() => setContentIndex(index)}
                         onMouseLeave={() => setHoveredDesc(null)}
                     >
-                        <img src={contentArray.img} className="h-48 w-full object-cover" alt="Content" />
+                        <img src={contentArray.img} className="h-24 sm:h-48 w-full object-cover" alt="Content"/>
                         {contentIndex !== null && contentIndex === index && (
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <div>{contentArray.desc}</div>

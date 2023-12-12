@@ -77,7 +77,7 @@ const Saved = () => {
     return (
         <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-4 text-white p-4 pt-20">
             <div className="absolute text-xl top-10 left-4">
-                Explore Feed
+                Saved Posts
             </div>
             {content.map((contentArray, index) => (
                 <div

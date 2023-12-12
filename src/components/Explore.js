@@ -67,8 +67,17 @@ const Explore = () => {
         },
     ];
 
+    const fetchInstagram = async () => {
+        const response = await fetch(`https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,timestamp&access_token=${process.env.REACT_APP_INSTAGRAM_KEY}`);
+        const jsonData = await response.json();
+
+        console.log("INSTAGRAM API");
+        console.log(jsonData);
+
+    }
 
     useEffect(() => {
+        fetchInstagram();
         return () => {
         };
     }, []);

@@ -23,7 +23,7 @@ function App() {
             <Route path="/Saved" element={<Saved />} />
             <Route path="/Profile" element={<Profile />} />  
           </Routes>
-        </div>
+          </div>
       </div>
     </Router>
   );
