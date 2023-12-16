@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const Navigation = () => {
     return( 
         <div className="text-white p-4 sm:w-1/5">
-            <p className="text-2xl pb-20"> SnapGram</p>
+            <p className="text-2xl pb-20"> SnapGram </p>
             <nav>
                 <ul className="text-sm sm:text-lg">
                         <li className="pb-10 flex hover:bg-sky-700 rounded-lg"> 
