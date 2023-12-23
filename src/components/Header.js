@@ -1,6 +1,6 @@
 const Header = () => {
     return(
-        <div className="fixed top-0 left-0 w-full bg-gray-950 text-white p-4 flex justify-between">
+        <div className="fixed top-0 left-0 w-full bg-zinc-900 text-white p-4 flex justify-between">
             <div className="flex">
                 <div className="font-inter text-2xl ml-20 mr-8">Moodz</div>
                 <input type="search" placeholder="Search..." className="pl-4 pr-4 rounded-full bg-gray-200 text-black"/>
