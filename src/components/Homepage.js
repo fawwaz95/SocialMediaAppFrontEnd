@@ -25,7 +25,7 @@ const Homepage = () => {
             </div>
         </div>*/
 
-        <div className="flex text-white text-2xl bg-zinc-950">
+        <div className="flex bg-zinc-950">
             <div className="fixed top-20 w-1/4 rounded-md ml-4 bg-zinc-900">
                 <ProfileWidget />
             </div>
@@ -37,6 +37,11 @@ const Homepage = () => {
             </div>
             <div className="fixed top-20 right-0 w-1/4 rounded-md ml-4 mr-4 bg-zinc-900">
                 <FriendslistWidget />
+            </div>
+            <div>
+                <a href="#">
+                    <img src="images/post_icon.svg" className="fixed bottom-0 right-0 h-12 hover:h-16 hover:animate-bounce mr-4 mb-4"/>
+                </a>
             </div>
         </div>
     )

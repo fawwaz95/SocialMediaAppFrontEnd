@@ -1,4 +1,15 @@
+import {useState} from 'react';
+import MessageBox from './MessageBox';
+
 const Header = () => {
+    const [isLightMode, setisLightMode] = useState(false);
+    const [showMsgBox, setShowMsgBox] = useState(false);
+
+    const setMode = () => {
+        console.log("Setting mode......");
+        setShowMsgBox(prevState => !prevState);
+    }
+
     return(
         <div className="fixed top-0 left-0 w-full bg-zinc-900 text-white p-4 flex justify-between">
             <div className="flex">
@@ -7,8 +18,16 @@ const Header = () => {
             </div>
 
             <div className="flex mr-4">
-                <div className="font-inter text-sm mr-4">nightmode icon</div>
-                <div className="font-inter text-sm">notification icon</div>
+                <div className="mr-4">
+                    <a href="#" onClick={()=> {setMode()}}>
+                        <img src="/images/lightmode_icon.svg" className="h-6"/>
+                    </a>
+                </div>
+                <div>
+                    <a href="#">
+                        <img src="/images/notification_icon.svg" className="h-6"/>
+                    </a>
+                </div>
             </div>
         </div>
     )
