@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 
 const Navigation = () => {
     return (
-        <div className="text-black">
+        <div className="fixed w-full flex flex-col bottom-0 text-white bg-slate-700 z-50">
             <li> Profile </li>
             <li> Friends </li>
             <li> Newsfeed </li>
-            <div className="fixed flex bottom-5 mr-4">
+            <div className="flex">
                 <div className="mr-4">
                     <a href="#">
                         <img src="/images/lightmode_icon.svg" className="h-6" />
