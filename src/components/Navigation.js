@@ -1,8 +1,25 @@
 import { Link } from "react-router-dom";
 
 const Navigation = () => {
-    return( 
-        <div className="text-white p-4 sm:w-1/5">
+    return (
+        <div className="text-black">
+            <li> Profile </li>
+            <li> Friends </li>
+            <li> Newsfeed </li>
+            <div className="fixed flex bottom-5 mr-4">
+                <div className="mr-4">
+                    <a href="#">
+                        <img src="/images/lightmode_icon.svg" className="h-6" />
+                    </a>
+                </div>
+                <div>
+                    <a href="#">
+                        <img src="/images/notification_icon.svg" className="h-6" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        /*<div className="text-white p-4 sm:w-1/5">
             <p className="text-2xl pb-20">SnapGram </p>
             <nav>
                 <ul className="text-sm sm:text-lg">
@@ -32,7 +49,7 @@ const Navigation = () => {
                         </li>                    
                 </ul>
             </nav>
-        </div>
+        </div>*/
     )
 }
 

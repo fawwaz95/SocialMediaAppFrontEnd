@@ -13,23 +13,31 @@ import Header from './components/Header';
 
 
 function App() {
+  const [isMobile, setIsMobile] = useState();
+  
+  const checkIsMobile = () => {
+    if(window.innerWidth <= 768){
+      console.log("ITS MOBILE");
+      setIsMobile(true);
+    }else{
+      console.log("Width is greater then 768");
+      setIsMobile(false);
+    }
+  }
 
-  useEffect(() => {
-    // Add event listeners or any necessary logic for scrolling if needed
-    const handleScroll = () => {
-        // Handle scroll events here if needed
-    };
-    window.addEventListener('scroll', handleScroll);
+  useEffect = () => {
+    checkIsMobile();
+    window.addEventListener("resize", checkIsMobile);
+
     return () => {
-        window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("resize", checkIsMobile);
     };
-}, []);
-
+  }
   return (
     <div className="flex flex-col">
-      <Header />
+      <Header isMobile={isMobile} />
       <div className="flex-1 h-screen">
-        <Homepage />
+        <Homepage isMobile={isMobile} />
       </div>       
     </div>
 
