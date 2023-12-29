@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Navigation = () => {
     return (
-        <div className="fixed w-full flex flex-col bottom-0 text-white bg-slate-700 z-50">
+        <div className="fixed w-full flex flex-col bottom-0 text-white bg-slate-700 z-50 ">
             <li> Profile </li>
             <li> Friends </li>
             <li> Newsfeed </li>
