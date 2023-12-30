@@ -30,13 +30,11 @@ function App() {
   
   return (
     <div className="bg-zinc-950">
-      <div>
-      <AppRoutes />
-      </div>
         <div className="flex flex-col">
         <Header isMobile={isMobile} />
         <div className="flex-1 h-screen">
-          <Homepage isMobile={isMobile} />
+          <AppRoutes />
+          {/*<Homepage isMobile={isMobile} />*/}
         </div>       
       </div>
     </div>
