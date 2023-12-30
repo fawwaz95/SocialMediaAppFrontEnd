@@ -10,8 +10,6 @@ const NewsfeedWidget = ({ isMobile }) => {
     return (
         <div>
             {!isMobile ? (
-
-
                 <div className="pt-4 ml-8 text-white text-base">
                     <div id="content" className="flex-col p-4 bg-zinc-900 rounded-md">
                         <div id="contentHeader" className="flex">
