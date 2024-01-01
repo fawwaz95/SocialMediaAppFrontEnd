@@ -6,13 +6,13 @@ import ProfilePage from './mobile/ProfilePage';
 import NewsfeedWidget from './NewsfeedWidget';
 import FriendslistPage from './mobile/FriendslistPage';
 
-const AppRoutes = () => {
+const AppRoutes = ( { isMobile }) => {
     return (
         <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/Profile" element={<ProfilePage />} />
-            <Route path="/Newsfeed" element={<NewsfeedWidget />} />
-            <Route path="/Friends" element={<FriendslistPage />} />
+            <Route path="/" element={<Homepage isMobile={isMobile}/>} />
+            <Route path="/Profile" element={<ProfilePage isMobile={isMobile}/>} />
+            <Route path="/Newsfeed" element={<NewsfeedWidget isMobile={isMobile}/>} />
+            <Route path="/Friends" element={<FriendslistPage isMobile={isMobile}/>} />
         </Routes>
     )
 }

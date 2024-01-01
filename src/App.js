@@ -33,7 +33,7 @@ function App() {
         <div className="flex flex-col">
         <Header isMobile={isMobile} />
         <div className="flex-1 h-screen">
-          <AppRoutes />
+          <AppRoutes isMobile={isMobile} />
           {/*<Homepage isMobile={isMobile} />*/}
         </div>       
       </div>
