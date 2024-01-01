@@ -4,11 +4,6 @@ import { useIsMobile } from '../../contexts/MobileContext';
 const NewsfeedWidget = () => {
     const isMobile = useIsMobile();
 
-    useEffect(() => {
-        return () => {
-        };
-    }, []);
-
     return (
         <div>
             {!isMobile ? (
