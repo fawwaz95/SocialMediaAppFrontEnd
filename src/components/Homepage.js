@@ -1,9 +1,9 @@
 import { useEffect, useState, useContext} from 'react';
 
-import ProfileWidget from './web/ProfileWidget';
-import PostWidget from './web/PostWidget';
-import NewsfeedWidget from './web/NewsfeedWidget';
-import FriendslistWidget from './web/FriendslistWidget';
+import ProfileWidget from './desktop/ProfileWidget';
+import PostWidget from './desktop/PostWidget';
+import NewsfeedWidget from './desktop/NewsfeedWidget';
+import FriendslistWidget from './desktop/FriendslistWidget';
 import { useIsMobile } from '../contexts/MobileContext';
 
 const Homepage = () => {
