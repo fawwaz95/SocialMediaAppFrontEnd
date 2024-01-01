@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext} from 'react';
 
-import ProfileWidget from './ProfileWidget';
-import PostWidget from './PostWidget';
-import NewsfeedWidget from './NewsfeedWidget';
-import FriendslistWidget from './FriendslistWidget';
+import ProfileWidget from './web/ProfileWidget';
+import PostWidget from './web/PostWidget';
+import NewsfeedWidget from './web/NewsfeedWidget';
+import FriendslistWidget from './web/FriendslistWidget';
+import { useIsMobile } from '../contexts/MobileContext';
 
-const Homepage = ( { isMobile } ) => {
+const Homepage = () => {
+    const isMobile = useIsMobile();
    
     return (
         <div className="flex bg-zinc-950">
@@ -34,7 +36,7 @@ const Homepage = ( { isMobile } ) => {
             </>
           ) : (
             <div className="m-4 pt-20 w-full">
-              <NewsfeedWidget isMobile={isMobile}/>
+              <NewsfeedWidget/>
               <div>
                 <a href="#">
                   <img

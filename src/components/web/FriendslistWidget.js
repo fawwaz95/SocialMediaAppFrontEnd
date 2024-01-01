@@ -16,7 +16,7 @@ const FriendslistWidget = () => {
                     <div className="text-slate-400"> Short Bio </div>
                 </div>
                 <div className="ml-auto flex items-center"> 
-                    <img src="images/following_icon.svg" className="h-4"/>
+                    <a href="#" ><img src="images/following_icon.svg" className="h-4"/></a>
                  </div>
            </div>
            <div className="flex pt-4">
@@ -26,7 +26,7 @@ const FriendslistWidget = () => {
                     <div className="text-slate-400"> Short Bio </div>
                 </div>
                 <div className="ml-auto flex items-center"> 
-                    <img src="images/following_icon.svg" className="h-4"/>
+                    <a href="#" ><img src="images/following_icon.svg" className="h-4"/></a>
                  </div>
            </div>
            <div className="flex pt-4">
@@ -36,7 +36,7 @@ const FriendslistWidget = () => {
                     <div className="text-slate-400"> Short Bio </div>
                 </div>
                 <div className="ml-auto flex items-center"> 
-                    <img src="images/following_icon.svg" className="h-4"/>
+                    <a href="#" ><img src="images/following_icon.svg" className="h-4"/></a>
                  </div>
            </div>
         </div>

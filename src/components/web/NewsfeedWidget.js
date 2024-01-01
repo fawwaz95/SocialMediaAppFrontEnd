@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { useIsMobile } from '../../contexts/MobileContext';
 
-const NewsfeedWidget = ({ isMobile }) => {
+const NewsfeedWidget = () => {
+    const isMobile = useIsMobile();
 
     useEffect(() => {
         return () => {

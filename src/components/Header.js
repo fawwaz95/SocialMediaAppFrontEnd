@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { Link } from "react-router-dom";
 import MessageBox from './MessageBox';
 import Navigation from './mobile/Navigation';
+import { useIsMobile } from '../contexts/MobileContext';
 
-const Header = ({ isMobile }) => {
+const Header = () => {
     const [isLightMode, setisLightMode] = useState(false);
     const [showMsgBox, setShowMsgBox] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
+    const isMobile = useIsMobile();
 
     const setMode = () => {
         console.log("Setting mode......");
