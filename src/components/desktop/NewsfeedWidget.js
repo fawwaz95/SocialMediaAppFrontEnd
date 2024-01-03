@@ -7,16 +7,16 @@ const NewsfeedWidget = () => {
     return (
         <div>
             {!isMobile ? (
-                <div className="pt-4 ml-8 text-white text-base">
+                <div className="pt-4 ml-8 text-white text-xs">
                     <div id="content" className="flex-col p-4 bg-zinc-900 rounded-md">
-                        <div id="contentHeader" className="flex">
-                            <div> Profile img </div>
+                        <div id="contentHeader" className="flex items-center">
+                            <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
                             <div className="flex-1 pl-4">
-                                <div> Username </div>
+                                <div> Immanuel Quickley </div>
                                 <div> Num of friends </div>
                             </div>
                             <div className="flex m-auto justify-between">
-                                <img src="/images/coolHouse.webp" className="h-8" />
+                                <a href="#" ><img src="images/following_icon.svg" className="h-5"/></a>
                             </div>
                         </div>
                         <div id="contentBody">
@@ -31,14 +31,14 @@ const NewsfeedWidget = () => {
                         </div>
                     </div>
                     <div id="content" className="flex-col p-4 mt-4 bg-zinc-900 rounded-md">
-                        <div id="contentHeader" className="flex">
-                            <div> Profile img </div>
+                        <div id="contentHeader" className="flex items-center">
+                            <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
                             <div className="flex-1 pl-4">
-                                <div> Username </div>
+                                <div> Kevin Hart </div>
                                 <div> Num of friends </div>
                             </div>
                             <div className="flex m-auto justify-between">
-                                <img src="/images/coolHouse.webp" className="h-8" />
+                                <a href="#" ><img src="images/following_icon.svg" className="h-6"/></a>
                             </div>
                         </div>
                         <div id="contentBody">
@@ -53,14 +53,14 @@ const NewsfeedWidget = () => {
                         </div>
                     </div>
                     <div id="content" className="flex-col p-4 mt-4 bg-zinc-900 rounded-md">
-                        <div id="contentHeader" className="flex">
-                            <div> Profile img </div>
+                        <div id="contentHeader" className="flex items-center">
+                            <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
                             <div className="flex-1 pl-4">
-                                <div> Username </div>
+                                <div> John Doe </div>
                                 <div> Num of friends </div>
                             </div>
                             <div className="flex m-auto justify-between">
-                                <img src="/images/coolHouse.webp" className="h-8" />
+                                <a href="#" ><img src="images/following_icon.svg" className="h-5"/></a>
                             </div>
                         </div>
                         <div id="contentBody">
@@ -79,14 +79,14 @@ const NewsfeedWidget = () => {
             ) : (<div>
                 <div className=" text-white text-base">
                     <div id="content" className="flex-col p-4 bg-zinc-900 rounded-md">
-                        <div id="contentHeader" className="flex">
-                            <div> Profile img </div>
+                        <div id="contentHeader" className="flex items-center">
+                            <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
                             <div className="flex-1 pl-4">
-                                <div> Username </div>
+                                <div> John Doe </div>
                                 <div> Num of friends </div>
                             </div>
                             <div className="flex m-auto justify-between">
-                                <img src="/images/coolHouse.webp" className="h-8" />
+                                <a href="#" ><img src="images/following_icon.svg" className="h-5"/></a>
                             </div>
                         </div>
                         <div id="contentBody">
@@ -101,14 +101,14 @@ const NewsfeedWidget = () => {
                         </div>
                     </div>
                     <div id="content" className="flex-col p-4 mt-4 bg-zinc-900 rounded-md">
-                        <div id="contentHeader" className="flex">
-                            <div> Profile img </div>
+                        <div id="contentHeader" className="flex items-center">
+                            <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
                             <div className="flex-1 pl-4">
-                                <div> Username </div>
+                                <div> Kevin Mann </div>
                                 <div> Num of friends </div>
                             </div>
                             <div className="flex m-auto justify-between">
-                                <img src="/images/coolHouse.webp" className="h-8" />
+                                <a href="#" ><img src="images/following_icon.svg" className="h-4"/></a>
                             </div>
                         </div>
                         <div id="contentBody">
@@ -123,14 +123,14 @@ const NewsfeedWidget = () => {
                         </div>
                     </div>
                     <div id="content" className="flex-col p-4 mt-4 bg-zinc-900 rounded-md">
-                        <div id="contentHeader" className="flex">
-                            <div> Profile img </div>
+                        <div id="contentHeader" className="flex items-center">
+                            <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
                             <div className="flex-1 pl-4">
-                                <div> Username </div>
+                                <div> Ricko Rubio </div>
                                 <div> Num of friends </div>
                             </div>
                             <div className="flex m-auto justify-between">
-                                <img src="/images/coolHouse.webp" className="h-8" />
+                                <a href="#" ><img src="images/following_icon.svg" className="h-5"/></a>
                             </div>
                         </div>
                         <div id="contentBody">
