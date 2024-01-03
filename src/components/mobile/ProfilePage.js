@@ -56,7 +56,7 @@ const Profile = () => {
     ];
 
     return (
-        <div>
+        <div className="pl-10">
             <div className="text-xl text-white pt-10 pl-4">
                 Profile
             </div>
@@ -67,18 +67,18 @@ const Profile = () => {
                         <div> 10 </div>
                     </div>
                     <div>
-                        Followers
+                        Friends
                         <div> 10 </div>
                     </div>
                     <div>
-                        Following
+                        Followers
                         <div> 10 </div>
                     </div>
             </div>
             <div className="text-white text-center w-40">
                 User Name
             </div>
-            <div className="relative grid grid-cols-3 sm:grid-cols-3 gap-4 text-white p-8"> {/*pt-80*/}
+            <div className="relative grid grid-cols-3 sm:grid-cols-3 gap-4 text-white py-4 pr-10"> {/*pt-80*/}
 
                 {content.map((contentArray, index) => (
                     <div

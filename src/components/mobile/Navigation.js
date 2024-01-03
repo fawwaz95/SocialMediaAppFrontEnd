@@ -24,7 +24,6 @@ const Navigation = () => {
                     </a>
                 </div>
             </div>
-            <Outlet />
         </div>
     )
 }

@@ -9,10 +9,20 @@ export const MobileProvider = ({ children }) => {
     setIsMobile(window.innerWidth <= 768);
   };
 
-  useEffect(() => {
+  const setResizeEvent = () => {
     window.addEventListener('resize', checkIsMobile);
-    return () => window.removeEventListener('resize', checkIsMobile);
-  }, []);
+  };
+
+  const removeResizeEvent = () => {
+    window.removeEventListener('resize', checkIsMobile);
+  };
+
+  useEffect(() => {
+    setResizeEvent(); // Add event listener on initial mount
+    return () => {
+      removeResizeEvent(); // Remove event listener on unmount
+    };
+  }, []); 
 
   return (
     <MobileContext.Provider value={isMobile}>

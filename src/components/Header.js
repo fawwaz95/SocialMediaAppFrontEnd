@@ -22,10 +22,10 @@ const Header = () => {
 
     return (
         <div>
-            <div className="fixed top-0 left-0 w-full bg-zinc-900 text-white p-4 flex justify-between">
+            <div className="fixed top-0 left-0 w-full bg-zinc-900 text-white p-4 flex justify-between z-50">
                 <div>
                     <div className="flex">
-                        <div className="font-inter text-2xl ml-20 mr-8"> <Link to="/"> Moodz </Link></div>
+                        <div className="font-inter text-2xl ml-3 mr-4 text-blue-400"> <Link to="/"> Moodz </Link></div>
                         <input type="search" placeholder="Search..." className="pl-4 pr-4 rounded-full bg-gray-600 text-black" />
                     </div>
                     <div className="fixed top-5 right-0 mr-4 flex">

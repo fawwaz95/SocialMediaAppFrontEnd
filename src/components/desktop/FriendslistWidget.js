@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react';
 
 const FriendslistWidget = () => {
-
-    useEffect = () => {
-        console.log("Friends componentntttttttttttttttttttttttt");
-    }
-
     return (
         <div className="p-4 text-white text-xs rounded-md">
            <div className="">Friendslist</div>

@@ -11,7 +11,7 @@ const Homepage = () => {
    
     return (
         <div className="flex bg-zinc-950">
-          {(!isMobile ? (
+          {!isMobile ? (
             <>
               <div className="fixed top-20 w-1/4 rounded-md ml-4 bg-zinc-900">
                 <ProfileWidget />
@@ -46,7 +46,7 @@ const Homepage = () => {
                 </a>
               </div>
             </div>
-          ))}
+          )}
         </div>
       );
 }
