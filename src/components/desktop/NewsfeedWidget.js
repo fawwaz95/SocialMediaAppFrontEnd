@@ -13,7 +13,7 @@ const NewsfeedWidget = () => {
                             <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
                             <div className="flex-1 pl-4">
                                 <div> Immanuel Quickley </div>
-                                <div> Num of friends </div>
+                                <div className="text-slate-400"> Toronto, ON</div>
                             </div>
                             <div className="flex m-auto justify-between">
                                 <a href="#" ><img src="images/following_icon.svg" className="h-5"/></a>
@@ -35,7 +35,7 @@ const NewsfeedWidget = () => {
                             <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
                             <div className="flex-1 pl-4">
                                 <div> Kevin Hart </div>
-                                <div> Num of friends </div>
+                                <div className="text-slate-400"> Philadelphia, PEN</div>
                             </div>
                             <div className="flex m-auto justify-between">
                                 <a href="#" ><img src="images/following_icon.svg" className="h-6"/></a>
@@ -57,7 +57,7 @@ const NewsfeedWidget = () => {
                             <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
                             <div className="flex-1 pl-4">
                                 <div> John Doe </div>
-                                <div> Num of friends </div>
+                                <div className="text-slate-400"> San Fransico, CA</div>
                             </div>
                             <div className="flex m-auto justify-between">
                                 <a href="#" ><img src="images/following_icon.svg" className="h-5"/></a>
@@ -83,7 +83,7 @@ const NewsfeedWidget = () => {
                             <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
                             <div className="flex-1 pl-4">
                                 <div> John Doe </div>
-                                <div> Num of friends </div>
+                                <div className="text-slate-400"> Montreal, QC </div>
                             </div>
                             <div className="flex m-auto justify-between">
                                 <a href="#" ><img src="images/following_icon.svg" className="h-5"/></a>
@@ -105,7 +105,7 @@ const NewsfeedWidget = () => {
                             <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
                             <div className="flex-1 pl-4">
                                 <div> Kevin Mann </div>
-                                <div> Num of friends </div>
+                                <div className="text-slate-400"> Los Angelas, CA</div>
                             </div>
                             <div className="flex m-auto justify-between">
                                 <a href="#" ><img src="images/following_icon.svg" className="h-4"/></a>
@@ -127,7 +127,7 @@ const NewsfeedWidget = () => {
                             <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
                             <div className="flex-1 pl-4">
                                 <div> Ricko Rubio </div>
-                                <div> Num of friends </div>
+                                <div className="text-slate-400"> Cleveland, OH</div>
                             </div>
                             <div className="flex m-auto justify-between">
                                 <a href="#" ><img src="images/following_icon.svg" className="h-5"/></a>

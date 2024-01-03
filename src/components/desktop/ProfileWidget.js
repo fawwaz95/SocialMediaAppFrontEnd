@@ -16,7 +16,7 @@ const ProfileWidget = () => {
                     <div className="text-xs text-slate-400"> Toronto, ON </div>
                 </div>
                 <div className="flex py-2">
-                    <div className="pr-4"> <img src="/images/bio_icon.svg" className="h-6"/> </div>
+                    <div className="pr-4"> <img src="/images/bio_icon.svg" className="h-4"/> </div>
                     <div className="text-start text-xs text-slate-400"> Turn the 6 upside down its a 9 now. Toronto Raptors </div>
                 </div>
             </div>
