@@ -10,8 +10,14 @@ const PostWidget = () => {
                 <textarea className="flex place-self-center bg-gray-500 w-full h-1/2 rounded-full pl-4 pt-4" placeholder="Post somthing...." />
            </div>
            <div className="flex justify-between p-4">
-                <div> Img Icon </div>
-                <div> Video Icon </div>
+                <div className="flex items-center">
+                    <a href="#"> <img src="/images/camera_icon.svg" className="h-8 pr-2" /> </a>
+                    <div>Camera</div>
+                </div>
+                <div className="flex items-center">
+                    <a href="#"> <img src="/images/upload_icon.svg" className="h-8 pr-2" /> </a>
+                    <div>Upload</div>
+                </div>
                 <button className="bg-sky-900 pl-8 pr-8 pt-2 pb-2 rounded-full"> Post </button>
            </div>
         </div>

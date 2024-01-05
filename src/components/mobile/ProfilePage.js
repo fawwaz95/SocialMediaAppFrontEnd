@@ -61,7 +61,7 @@ const Profile = () => {
                 Profile
             </div>
             <div className="flex flex-wrap justify-between pt-10 pr-20 pb-4 text-white"> {/*pt-4 pb-8 pr-12*/}
-                <img src="images/profileImage_EmeraldGreen.webp" className="h-24 w-24 sm:h-40 sm:w-40 rounded-full"/>
+                <img src="images/profile_image.jpg" className="h-24 w-24 sm:h-40 sm:w-40 rounded-full"/>
                     <div>
                         Posts
                         <div> 10 </div>

@@ -10,7 +10,7 @@ const Homepage = () => {
     const isMobile = useIsMobile();
    
     return (
-        <div className="flex bg-zinc-950">
+        <div className="flex">
           {!isMobile ? (
             <>
               <div className="fixed top-20 w-1/4 rounded-md ml-4 bg-zinc-900">

@@ -22,6 +22,7 @@ const Header = () => {
 
     return (
         <div>
+            {!isMobile ? (
             <div className="fixed top-0 left-0 w-full bg-zinc-900 text-white p-4 flex justify-between z-50">
                 <div>
                     <div className="flex">
@@ -42,7 +43,7 @@ const Header = () => {
                     </div>
                 </div>
             </div>
-            {isMobile && (
+            ) : (
                 <div>
                     <div className="fixed top-0 left-0 w-full bg-zinc-900 text-white p-4 flex justify-between">
                         <div className="font-inter text-xl mt-2 ml-2 mr-2">Moodz</div>
