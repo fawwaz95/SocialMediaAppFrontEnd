@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link } from "react-router-dom";
-import MessageBox from './MessageBox';
-import Navigation from './mobile/Navigation';
-import { useIsMobile } from '../contexts/MobileContext';
+import MessageBox from '../WindowPopups/MessageBox';
+import Navigation from '../Mobile/Navigation';
+import { useIsMobile } from '../../contexts/MobileContext';
 
 const Header = () => {
     const [isLightMode, setisLightMode] = useState(false);

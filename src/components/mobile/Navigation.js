@@ -12,6 +12,9 @@ const Navigation = () => {
             <div> 
                 <Link to="/Newsfeed"> Newsfeed </Link>
             </div>
+            <div> 
+                <Link to="/Login"> Login </Link>
+            </div>
             <div className="flex">
                 <div className="mr-4">
                     <a href="#">

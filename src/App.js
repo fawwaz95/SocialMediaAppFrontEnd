@@ -1,15 +1,15 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-import Homepage from './components/Homepage';
-import Header from './components/Header';
-import AppRoutes from './components/AppRoutes';
+import Homepage from './components/Neutral/HomePage';
+import Header from './components/Neutral/Header';
+import AppRoutes from './components/AppRoutes/AppRoutes';
 import { MobileProvider } from './contexts/MobileContext';
 
 
 function App() {
   return (
-    <div className="bg-zinc-950">
+    <div className="bg-zinc-950">  {/*bg-gradient-to-r from-blue-400 via-slate-500 to-black-500*/}
       <MobileProvider>
         <div className="flex flex-col">
           <Header />

@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { useIsMobile } from '../../contexts/MobileContext';
 
-import NewsfeedPage from '../mobile/NewsfeedPage';
+import NewsfeedPage from '../Mobile/NewsfeedPage';
 
 const NewsfeedWidget = () => {
     const isMobile = useIsMobile();
@@ -9,7 +9,7 @@ const NewsfeedWidget = () => {
     return (
         <div>
             {!isMobile ? (
-                <div className="pt-4 ml-8 text-white text-xs">
+                <div className="p-4 ml-8 text-white text-xs">
                     <div id="content" className="flex-col p-4 bg-zinc-900 rounded-md">
                         <div id="contentHeader" className="flex items-center">
                             <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
