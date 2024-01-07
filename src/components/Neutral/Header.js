@@ -29,8 +29,8 @@ const Header = () => {
                         <div className="font-inter text-2xl ml-3 mr-4 text-blue-400"> <Link to="/"> Moodz </Link></div>
                         <input type="search" placeholder="Search..." className="pl-4 pr-4 rounded-full bg-gray-600 text-black" />
                     </div>
-                    <div className="fixed top-5 right-0 mr-4 flex">
-                        <div className="mr-4">
+                    <div className="fixed top-5 right-0 mr-4 gap-4 flex">
+                        <div className="flex gap-4">
                             <a href="#" onClick={() => { setMode() }}>
                                 <img src="/images/lightmode_icon.svg" className="h-6" />
                             </a>
@@ -40,6 +40,7 @@ const Header = () => {
                                 <img src="/images/notification_icon.svg" className="h-6" />
                             </a>
                         </div>
+                        <div>Logout</div>
                     </div>
                 </div>
             </div>
