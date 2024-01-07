@@ -1,6 +1,6 @@
 const NewsfeedPage = () => {
     return (
-        <div className="pt-20">
+        <div className="">
                 <div className=" text-white text-base">
                     <div id="content" className="flex-col p-4 bg-zinc-900 rounded-md">
                         <div id="contentHeader" className="flex items-center">
@@ -14,13 +14,13 @@ const NewsfeedPage = () => {
                             </div>
                         </div>
                         <div id="contentBody">
-                            <div className="flex flex-col">
+                            <div className="flex flex-col items-start">
+                                <div className="py-4"> Caption </div>
                                 <img src="/images/coolHouse.webp" className="pt-4 pb-4" />
-                                <div> Caption </div>
                             </div>
                             <div className="flex">
-                                <div className="pr-4"> Like Icon </div>
-                                <div> Comment Icon </div>
+                                <div className="pr-4"><img src="/images/heart_icon.svg" className="h-4"></img> </div>
+                                <div> <img src="/images/comment_icon.svg" className="h-4"></img> </div>
                             </div>
                         </div>
                     </div>
@@ -36,13 +36,13 @@ const NewsfeedPage = () => {
                             </div>
                         </div>
                         <div id="contentBody">
-                            <div className="flex flex-col">
+                            <div className="flex flex-col items-start">
+                                <div className="py-4"> Caption </div>
                                 <img src="/images/coolHouse.webp" className="pt-4 pb-4" />
-                                <div> Caption </div>
                             </div>
                             <div className="flex">
-                                <div className="pr-4"> Like Icon </div>
-                                <div> Comment Icon </div>
+                                <div className="pr-4"><img src="/images/heart_icon.svg" className="h-4"></img> </div>
+                                <div> <img src="/images/comment_icon.svg" className="h-4"></img> </div>
                             </div>
                         </div>
                     </div>
@@ -58,13 +58,13 @@ const NewsfeedPage = () => {
                             </div>
                         </div>
                         <div id="contentBody">
-                            <div className="flex flex-col">
+                            <div className="flex flex-col items-start">
+                                <div className="py-4"> Caption </div>
                                 <img src="/images/coolHouse.webp" className="pt-4 pb-4" />
-                                <div> Caption </div>
                             </div>
                             <div className="flex">
-                                <div className="pr-4"> Like Icon </div>
-                                <div> Comment Icon </div>
+                                <div className="pr-4"><img src="/images/heart_icon.svg" className="h-4"></img> </div>
+                                <div> <img src="/images/comment_icon.svg" className="h-4"></img> </div>
                             </div>
                         </div>
                     </div>

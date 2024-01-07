@@ -7,7 +7,12 @@ const LoginPage = () => {
     })
     return(
         <div className="h-screen flex flex-col items-center justify-center text-slate-400">
-            <Link to="/Register"> <div className="absolute top-20 right-0 p-4 text-white"> Register <img src="/images/rightArrow_Icon.svg" className="h-8"></img></div> </Link>
+            <div className="absolute top-20 right-0 p-4 text-white">
+                <Link to="/Register" className="flex items-center">
+                    <div className="mr-2">Register</div>
+                    <img src="/images/rightArrow_Icon.svg" className="h-8" alt="Right arrow icon" />
+                </Link>
+            </div>
             <div className="flex flex-col items-center justify-center gap-2 w-96 p-2">
                 <div className="self-start">
                     <div className="text-3xl text-blue-400 py-8"> Login </div>

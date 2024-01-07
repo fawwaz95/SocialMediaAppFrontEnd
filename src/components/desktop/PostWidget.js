@@ -18,7 +18,7 @@ const PostWidget = () => {
                     <a href="#"> <img src="/images/upload_icon.svg" className="h-8 pr-2" /> </a>
                     <div>Upload</div>
                 </div>
-                <button className="bg-sky-900 pl-8 pr-8 pt-2 rounded-full"> Post </button>
+                <button className="bg-sky-900 pl-8 pr-8 py-2 rounded-full"> Post </button>
            </div>
         </div>
     )
