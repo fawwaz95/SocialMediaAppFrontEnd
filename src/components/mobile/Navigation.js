@@ -15,6 +15,9 @@ const Navigation = () => {
             <div> 
                 <Link to="/Login"> Login </Link>
             </div>
+            <div> 
+                <Link to="/Register"> Register </Link>
+            </div>
             <div className="flex">
                 <div className="mr-4">
                     <a href="#">
