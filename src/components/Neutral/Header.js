@@ -40,7 +40,7 @@ const Header = () => {
                                 <img src="/images/notification_icon.svg" className="h-6" />
                             </a>
                         </div>
-                        <div><a href="#"> Logout </a></div>
+                        <div><Link to="/Login">Logout </Link> </div>
                     </div>
                 </div>
             </div>
