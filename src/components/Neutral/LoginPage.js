@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate  } from "react-router-dom";
+import Homepage from "../Neutral/HomePage";
 
 const LoginPage = () => {
+    const navigate = useNavigate();
     const emailOrUsernameRef = useRef();
     const passwordRef = useRef();
 
@@ -12,7 +14,7 @@ const LoginPage = () => {
     const saveUserCredentials = async () => {
         if (!emailOrUsernameRef.current.value || !passwordRef.current.value) {
             console.log("Please specify both email/username & password");
-            return false;       //update the return value later.........
+            return false;
         }
 
         const userCredentials = {
@@ -21,7 +23,7 @@ const LoginPage = () => {
         }
 
         try {
-            const response = await fetch("http://localhost:3001/routes/login", {
+            const postMethod = {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -30,7 +32,9 @@ const LoginPage = () => {
                     userName: userCredentials.userName,
                     password: userCredentials.password,
                 }),
-            });
+            }
+            
+            const response = await fetch("http://localhost:3001/routes/login", postMethod);
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -38,9 +42,15 @@ const LoginPage = () => {
 
             const data = await response.json();
 
-            console.log("The data");
-            console.log(data);
-            return data;
+            if(data.success === false){
+                console.log("Invalid user......");
+                console.log(data.message);
+            }else{
+                console.log("Login Successful");
+                console.log(data);
+                navigate('/');
+            }
+            
         } catch (error) {
             console.error('Error during login:', error);
             throw error;
