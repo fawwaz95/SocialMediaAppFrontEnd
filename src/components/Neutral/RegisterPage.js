@@ -97,19 +97,19 @@ return (
             <input type="text" className="w-full p-2 text-white bg-slate-800 rounded-md" ref={lastNameRef} />
 
             {isValidUsername && isValidUsername.success === false && 
-                <div className="self-start bg-red-600 text-white">{isValidUsername.message}</div>
+                <div className="self-start py-2 px-1 bg-red-600 text-white rounded-md">{isValidUsername.message}</div>
             }
             <div className="self-start">User name</div>
             <input type="text" className= "w-full p-2 text-blawhiteck bg-slate-800 rounded-md" ref={userNameRef} />
 
             {isValidEmail && isValidEmail.success === false && 
-                <div className="self-start bg-red-600 text-white">{isValidEmail.message}</div>
+                <div className="self-start py-2 px-1 bg-red-600 text-white rounded-md">{isValidEmail.message}</div>
             }
             <div className="self-start">Email</div>
             <input type="email" className="w-full p-2 text-white bg-slate-800 rounded-md" ref={emailRef} />
 
             {isValidPassword && isValidPassword.success === false && 
-                <div className="self-start bg-red-600 text-white">{isValidPassword.message}</div>
+                <div className="self-start py-2 px-1 bg-red-600 text-white rounded-md">{isValidPassword.message}</div>
             }
             <div className="self-start pt-2">Password</div>
             <input type="password" className= "w-full p-2 mb-4 text-white bg-slate-800 rounded-md" ref={passwordRef} />
