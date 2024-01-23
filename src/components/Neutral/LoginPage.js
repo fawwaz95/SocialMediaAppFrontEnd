@@ -6,34 +6,17 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const usernameRef = useRef();
     const passwordRef = useRef();
-    const [isValidUsername, setIsValidUsername] = useState({});
-    const [isValidPassword, setIsValidPassword] = useState({});
-    const [isLogin, setIsLogin] = useState(false);
-    const [isCredentailsMatch, setIsCredentailsMatch] = useState({});
+    const [loginInfo, setLoginInfo] = useState({});
 
     useEffect(() => {
-        console.log("LOGIN PAGE");
-    })
-
-    const checkUserNamePassword = (userName, password) => {
-        const validateUsername = !userName ? {success: false, message: "Please specify a username"} : {success: true, message: "Username provided"}
-        const validatePassword = !password ? {success: false, message: "Please specify a password"} : {success: true, message: "Password provided"}
-
-        setIsValidUsername(validateUsername);
-        setIsValidPassword(validatePassword);
-    }
-
-    const checkUsernamePasswordMatch = (data) => {
-        const validateCredentials = data && data.success === false ? { success: false, message: data.message } :  { success: true, message: "User credentials match!" }
-        setIsCredentailsMatch(validateCredentials);
-        setIsValidUsername(false);
-        setIsValidPassword(false);
-    }
+        if (loginInfo.success === true) {
+            console.log("Login Successful");
+            console.log(loginInfo);
+            navigate('/');
+          }
+    }, [loginInfo])
 
     const loginToApp = async () => {
-
-        checkUserNamePassword(usernameRef.current.value, passwordRef.current.value);
-
         const userCredentials = {
             userName: usernameRef.current.value,
             password: passwordRef.current.value,
@@ -58,14 +41,7 @@ const LoginPage = () => {
             }
 
             const data = await response.json();
-            
-            checkUsernamePasswordMatch(data);
-            
-            if(isCredentailsMatch.success === true){
-                console.log("Login Successful");
-                console.log(data);
-                navigate('/');
-            }
+            setLoginInfo(data);
             
         } catch (error) {
             console.error('Error during login:', error);
@@ -86,18 +62,11 @@ const LoginPage = () => {
                 <div className="self-start">
                     <div className="text-3xl text-blue-400 py-8"> Login </div>
                 </div>
-                {isLogin && isCredentailsMatch.success === false && 
-                    <div className="self-start py-2 px-1 bg-red-600 text-white rounded-md">{isCredentailsMatch.message}</div>
-                }
-                {isValidUsername && isValidUsername.success === false && 
-                    <div className="self-start py-2 px-1 bg-red-600 text-white rounded-md">{isValidUsername.message}</div>
+                {loginInfo && loginInfo.success === false && 
+                    <div className="self-start py-2 px-1 bg-red-600 text-white rounded-md">{loginInfo.message}</div>
                 }
                 <div className="self-start">Username</div>
                 <input type="text" className="w-full p-2 text-white bg-slate-800 rounded-md" ref={usernameRef} />
-
-                {isValidPassword && isValidPassword.success === false && 
-                    <div className="self-start py-2 px-1 bg-red-600 text-white rounded-md">{isValidPassword.message}</div>
-                }
                 <div className="self-start pt-2">Password</div>
                 <input type="password" className="w-full p-2 mb-4 text-white bg-slate-800 rounded-md" ref={passwordRef} />
                 <button type="submit" className="w-full py-2 text-white bg-blue-400 rounded-md" onClick={(e) => {
