@@ -4,22 +4,50 @@ import Homepage from "../Neutral/HomePage";
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    const usernameRef = useRef();
-    const passwordRef = useRef();
+    const inpUsernameRef = useRef();
+    const inpPasswordRef = useRef();
+    const btnLoginRef = useRef();
     const [loginInfo, setLoginInfo] = useState({});
 
     useEffect(() => {
+        setEventListeners();
+        validateLogin();
+        
+    }, [loginInfo])
+
+    const validateLogin = () => {
         if (loginInfo.success === true) {
             console.log("Login Successful");
             console.log(loginInfo);
             navigate('/');
           }
-    }, [loginInfo])
+    }
+
+    const handleKeyDown = (e) => {
+        console.log("Handling");
+        if (e.key === "Enter") {
+            e.preventDefault();
+            loginToApp();
+        }
+    };
+
+    const handleonClick = () => {
+        console.log("handleonClick");
+        loginToApp();
+    };
+
+    const setEventListeners = () => {
+        inpUsernameRef.current.addEventListener("keydown", handleKeyDown);
+        inpPasswordRef.current.addEventListener("keydown", handleKeyDown);
+        btnLoginRef.current.addEventListener("click", handleonClick);
+    }
+
+    //Might need to add removeEventListeners function after comp unmounts
 
     const loginToApp = async () => {
         const userCredentials = {
-            userName: usernameRef.current.value,
-            password: passwordRef.current.value,
+            userName: inpUsernameRef.current.value,
+            password: inpPasswordRef.current.value,
         }
 
         try {
@@ -47,7 +75,6 @@ const LoginPage = () => {
             console.error('Error during login:', error);
             throw error;
         }
-
     }
 
     return (
@@ -66,13 +93,13 @@ const LoginPage = () => {
                     <div className="self-start py-2 px-1 bg-red-600 text-white rounded-md">{loginInfo.message}</div>
                 }
                 <div className="self-start">Username</div>
-                <input type="text" className="w-full p-2 text-white bg-slate-800 rounded-md" ref={usernameRef} />
+                <input type="text" className="w-full p-2 text-white bg-slate-800 rounded-md" ref={inpUsernameRef} />
                 <div className="self-start pt-2">Password</div>
-                <input type="password" className="w-full p-2 mb-4 text-white bg-slate-800 rounded-md" ref={passwordRef} />
-                <button type="submit" className="w-full py-2 text-white bg-blue-400 rounded-md" onClick={(e) => {
+                <input type="password" className="w-full p-2 mb-4 text-white bg-slate-800 rounded-md" ref={inpPasswordRef} />
+                <button type="submit" className="w-full py-2 text-white bg-blue-400 rounded-md" /*onClick={(e) => {
                     e.preventDefault()
                     loginToApp()
-                }}>Log in</button>
+                }}*/ ref={btnLoginRef}>Log in</button>
                 <div className="text-xs text-slate-400"> <a href="#"> Forgot your password? </a> </div>
             </div>
         </div>
