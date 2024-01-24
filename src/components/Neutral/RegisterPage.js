@@ -9,11 +9,12 @@ const RegisterPage = () => {
     const emailRef = useRef();
     const passwordRef = useRef();
 
+    const [errorMessage, setErrorMessage] = useState({});
     const [isValidEmail, setIsValidEmail] = useState({});
     const [isValidUsername, setIsValidUsername] = useState({});
     const [isValidPassword, setIsValidPassword] = useState({});
 
-    const checkValidEmail = (email)  => {
+    /*const checkValidEmail = (email)  => {
         const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const validateEmail = pattern.test(email) ? {success: true, message: "Email address is valid"} : {success: false, message: "Please provide a valid Email address"}
         setIsValidEmail(validateEmail);
@@ -29,13 +30,13 @@ const RegisterPage = () => {
         const validatePassword = password.length > 6 ? {success: true, message: "Password meets required minimum length"} : 
                                                                 {success: false, message: "Password must be at least 6 characters"};
         setIsValidPassword(validatePassword);
-    }
+    }*/
 
     const registerUser = async () => {
         try {
-            checkValidEmail(emailRef.current.value);
+            /*checkValidEmail(emailRef.current.value);
             checkValidUsername(userNameRef.current.value);
-            checkValidPassword(passwordRef.current.value);
+            checkValidPassword(passwordRef.current.value);*/
 
             const registerUser = {
                 firstName: fistNameRef.current.value,
@@ -70,8 +71,9 @@ const RegisterPage = () => {
             if (jsonData && jsonData.success === true) {
                 console.log("User registered!!!");
                 console.log(jsonData);
-
                 navigate("/");
+            }else{
+                setErrorMessage(jsonData);
             }
     }catch (error) {
         console.error("Error registering user.......");
@@ -91,26 +93,17 @@ return (
             <div className="self-start">
                 <div className="text-3xl text-blue-400 py-8"> Register </div>
             </div>
+            {errorMessage && errorMessage.success === false && 
+                <div className="self-start py-2 px-1 bg-red-600 text-white rounded-md">{errorMessage.message}</div>
+            }
             <div className="self-start">First name</div>
             <input type="text" className="w-full p-2 text-white bg-slate-800 rounded-md" ref={fistNameRef} />
             <div className="self-start">Last name</div>
             <input type="text" className="w-full p-2 text-white bg-slate-800 rounded-md" ref={lastNameRef} />
-
-            {isValidUsername && isValidUsername.success === false && 
-                <div className="self-start py-2 px-1 bg-red-600 text-white rounded-md">{isValidUsername.message}</div>
-            }
             <div className="self-start">User name</div>
             <input type="text" className= "w-full p-2 text-blawhiteck bg-slate-800 rounded-md" ref={userNameRef} />
-
-            {isValidEmail && isValidEmail.success === false && 
-                <div className="self-start py-2 px-1 bg-red-600 text-white rounded-md">{isValidEmail.message}</div>
-            }
             <div className="self-start">Email</div>
             <input type="email" className="w-full p-2 text-white bg-slate-800 rounded-md" ref={emailRef} />
-
-            {isValidPassword && isValidPassword.success === false && 
-                <div className="self-start py-2 px-1 bg-red-600 text-white rounded-md">{isValidPassword.message}</div>
-            }
             <div className="self-start pt-2">Password</div>
             <input type="password" className= "w-full p-2 mb-4 text-white bg-slate-800 rounded-md" ref={passwordRef} />
             <button type="submit" className="w-full py-2 text-white bg-blue-400 rounded-md" onClick={(e) => {

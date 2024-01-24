@@ -10,10 +10,15 @@ const LoginPage = () => {
     const [loginInfo, setLoginInfo] = useState({});
 
     useEffect(() => {
+        console.log("Mounting or updating.....");
         setEventListeners();
         validateLogin();
+
+        return () => {
+            console.log("Unmounting.....");
+        }
         
-    }, [loginInfo])
+    }, [loginInfo]);
 
     const validateLogin = () => {
         if (loginInfo.success === true) {
@@ -24,7 +29,7 @@ const LoginPage = () => {
     }
 
     const handleKeyDown = (e) => {
-        console.log("Handling");
+        console.log("handleKeyDown");
         if (e.key === "Enter") {
             e.preventDefault();
             loginToApp();
