@@ -5,10 +5,12 @@ import PostWidget from '../Desktop/PostWidget';
 import NewsfeedWidget from '../Desktop/NewsfeedWidget';
 import FriendslistWidget from '../Desktop/FriendslistWidget';
 import { useIsMobile } from '../../contexts/MobileContext';
+import { useSelector } from "react-redux";
 
 const Homepage = () => {
     const isMobile = useIsMobile();
-   
+    const state = useSelector((state) => state);
+    console.log("store", state);
     return (
         <div className="flex">
           {!isMobile ? (

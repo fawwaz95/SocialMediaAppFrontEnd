@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate  } from "react-router-dom";
-import Homepage from "../Neutral/HomePage";
+import {useDispatch } from "react-redux";
+import { loginUser } from "../../actions/loginAction";
 
 const LoginPage = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const inpUsernameRef = useRef();
     const inpPasswordRef = useRef();
     const btnLoginRef = useRef();
@@ -104,7 +107,7 @@ const LoginPage = () => {
                 <button type="submit" className="w-full py-2 text-white bg-blue-400 rounded-md" /*onClick={(e) => {
                     e.preventDefault()
                     loginToApp()
-                }}*/ ref={btnLoginRef}>Log in</button>
+                }}*/ ref={btnLoginRef} onClick={() => dispatch(loginUser(loginInfo))}>Log in</button>
                 <div className="text-xs text-slate-400"> <a href="#"> Forgot your password? </a> </div>
             </div>
         </div>
