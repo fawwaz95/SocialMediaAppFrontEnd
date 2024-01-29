@@ -3,7 +3,7 @@ import { loginReducer } from "./reducers/loginReducer";
 
 const store = configureStore({
     reducer: {
-      user: loginReducer,
+        userInfo: loginReducer,
       // Add other reducers if needed
     },
   });

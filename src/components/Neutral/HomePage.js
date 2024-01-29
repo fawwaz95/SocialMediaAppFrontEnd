@@ -9,8 +9,12 @@ import { useSelector } from "react-redux";
 
 const Homepage = () => {
     const isMobile = useIsMobile();
-    const state = useSelector((state) => state);
-    console.log("store", state);
+    const state = useSelector((state) => state.userInfo);
+
+    useEffect(() => {
+      console.log("Calling useEffect homepage");
+      console.log("store", state);
+    },[state])
     return (
         <div className="flex">
           {!isMobile ? (

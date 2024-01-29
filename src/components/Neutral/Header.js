@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import MessageBox from '../WindowPopups/MessageBox';
 import Navigation from '../Mobile/Navigation';
 import { useIsMobile } from '../../contexts/MobileContext';
+import { useSelector } from "react-redux";
+
 
 const Header = () => {
     const [isLightMode, setisLightMode] = useState(false);
     const [showMsgBox, setShowMsgBox] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
-    const isMobile = useIsMobile();
+    const isMobile = useIsMobile();    
 
     const setMode = () => {
         console.log("Setting mode......");

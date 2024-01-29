@@ -32,7 +32,6 @@ const LoginPage = () => {
     }
 
     const handleKeyDown = (e) => {
-        console.log("handleKeyDown");
         if (e.key === "Enter") {
             e.preventDefault();
             loginToApp();
@@ -40,7 +39,6 @@ const LoginPage = () => {
     };
 
     const handleonClick = () => {
-        console.log("handleonClick");
         loginToApp();
     };
 
@@ -78,6 +76,7 @@ const LoginPage = () => {
 
             const data = await response.json();
             setLoginInfo(data);
+            dispatch(loginUser(data));
             
         } catch (error) {
             console.error('Error during login:', error);
@@ -107,7 +106,7 @@ const LoginPage = () => {
                 <button type="submit" className="w-full py-2 text-white bg-blue-400 rounded-md" /*onClick={(e) => {
                     e.preventDefault()
                     loginToApp()
-                }}*/ ref={btnLoginRef} onClick={() => dispatch(loginUser(loginInfo))}>Log in</button>
+                }}*/ ref={btnLoginRef}> Log in</button>
                 <div className="text-xs text-slate-400"> <a href="#"> Forgot your password? </a> </div>
             </div>
         </div>

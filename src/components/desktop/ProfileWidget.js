@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const ProfileWidget = () => {
+    const userState = useSelector((state) => state.userInfo);
+
+
     return (
         <div id="profileWidget" className="p-4 text-white text-sm rounded-md">
             <div className="flex pb-4 border-b">
                 <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" />
                 <div className="flex-1 pl-4">
-                    <div> RJ Barrett </div>
+                    <div> {userState.userInfo.firstName + " " + userState.userInfo.lastName} </div>
                     <div className="text-start text-xs text-slate-400"> 25 Friends</div>
                 </div>
             </div>
