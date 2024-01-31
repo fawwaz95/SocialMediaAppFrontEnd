@@ -1,7 +1,6 @@
 const NewsfeedPage = () => {
     return (
-        <div className="">
-                <div className=" text-white text-base">
+                <div className="pt-20 text-white text-base">
                     <div id="content" className="flex-col p-4 bg-zinc-900 rounded-md">
                         <div id="contentHeader" className="flex items-center">
                             <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
@@ -69,7 +68,6 @@ const NewsfeedPage = () => {
                         </div>
                     </div>
                 </div>
-            </div>
     )
 }
 

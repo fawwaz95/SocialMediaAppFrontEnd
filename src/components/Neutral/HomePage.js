@@ -4,17 +4,13 @@ import ProfileWidget from '../Desktop/ProfileWidget';
 import PostWidget from '../Desktop/PostWidget';
 import NewsfeedWidget from '../Desktop/NewsfeedWidget';
 import FriendslistWidget from '../Desktop/FriendslistWidget';
+import NewsfeedPage from '../Mobile/NewsfeedPage';
 import { useIsMobile } from '../../contexts/MobileContext';
 import { useSelector } from "react-redux";
 
 const Homepage = () => {
     const isMobile = useIsMobile();
-    const state = useSelector((state) => state.userInfo);
 
-    useEffect(() => {
-      console.log("Calling useEffect homepage");
-      console.log("store", state);
-    },[state])
     return (
         <div className="flex">
           {!isMobile ? (
@@ -41,8 +37,8 @@ const Homepage = () => {
               </div>
             </>
           ) : (
-            <div className="m-4 pt-20 w-full">
-              <NewsfeedWidget/>
+            <div className=""> {/*These classes arent taking any effects.....className="m-4 pt-20 w-full"*/}
+              <NewsfeedPage/>
               <div>
                 <a href="#">
                   <img

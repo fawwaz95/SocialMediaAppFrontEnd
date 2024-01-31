@@ -1,49 +1,54 @@
-import { useRef, useState } from "react";
-import { Link, useNavigate} from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../actions/loginAction";
 
 const RegisterPage = () => {
     const navigate = useNavigate();
-    const fistNameRef = useRef();
-    const lastNameRef = useRef();
-    const userNameRef = useRef();
-    const emailRef = useRef();
-    const passwordRef = useRef();
+    const dispatch = useDispatch();
+    const inpFirstNameRef = useRef();
+    const inpLastNameRef = useRef();
+    const inpUserNameRef = useRef();
+    const inpEmailRef = useRef();
+    const inpPasswordRef = useRef();
+    const btnRegisterRef = useRef();
 
     const [errorMessage, setErrorMessage] = useState({});
-    const [isValidEmail, setIsValidEmail] = useState({});
-    const [isValidUsername, setIsValidUsername] = useState({});
-    const [isValidPassword, setIsValidPassword] = useState({});
 
-    /*const checkValidEmail = (email)  => {
-        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const validateEmail = pattern.test(email) ? {success: true, message: "Email address is valid"} : {success: false, message: "Please provide a valid Email address"}
-        setIsValidEmail(validateEmail);
+    useEffect( () => {
+        addEventListeners();
+    })
+
+    const handleKeyDown = (e) => {
+        if(e.key === "Enter"){
+            console.log("Clicked key")
+            e.preventDefault(); 
+            registerUser();
+        }
     }
 
-    const checkValidUsername = (userName)  => {
-        const validateUsername = userName.length >= 6 ? {success: true, message: "Username meets required minimum length"} : 
-                                                                {success: false, message: "Username must be at least 6 characters"};
-        setIsValidUsername(validateUsername);
+    const handleClick = () => {
+        registerUser();
     }
 
-    const checkValidPassword = (password)  => {
-        const validatePassword = password.length > 6 ? {success: true, message: "Password meets required minimum length"} : 
-                                                                {success: false, message: "Password must be at least 6 characters"};
-        setIsValidPassword(validatePassword);
-    }*/
+    const addEventListeners = () => {
+        inpFirstNameRef.current.addEventListener("keydown", handleKeyDown);
+        inpLastNameRef.current.addEventListener("keydown", handleKeyDown);
+        inpUserNameRef.current.addEventListener("keydown", handleKeyDown);
+        inpUserNameRef.current.addEventListener("keydown", handleKeyDown);
+        inpEmailRef.current.addEventListener("keydown", handleKeyDown);
+        inpPasswordRef.current.addEventListener("keydown", handleKeyDown);
+        btnRegisterRef.current.addEventListener("click", handleClick);
+    }
 
     const registerUser = async () => {
         try {
-            /*checkValidEmail(emailRef.current.value);
-            checkValidUsername(userNameRef.current.value);
-            checkValidPassword(passwordRef.current.value);*/
-
             const registerUser = {
-                firstName: fistNameRef.current.value,
-                lastName: lastNameRef.current.value,
-                userName: userNameRef.current.value,
-                email: emailRef.current.value,
-                password: passwordRef.current.value
+                firstName: inpFirstNameRef.current.value,
+                lastName: inpLastNameRef.current.value,
+                userName: inpUserNameRef.current.value,
+                email: inpEmailRef.current.value,
+                password: inpPasswordRef.current.value
             }
 
             const postMethod = {
@@ -72,6 +77,7 @@ const RegisterPage = () => {
                 console.log("User registered!!!");
                 console.log(jsonData);
                 navigate("/");
+                dispatch(loginUser(jsonData));            
             }else{
                 setErrorMessage(jsonData);
             }
@@ -97,20 +103,16 @@ return (
                 <div className="self-start py-2 px-1 bg-red-600 text-white rounded-md">{errorMessage.message}</div>
             }
             <div className="self-start">First name</div>
-            <input type="text" className="w-full p-2 text-white bg-slate-800 rounded-md" ref={fistNameRef} />
+            <input type="text" className="w-full p-2 text-white bg-slate-800 rounded-md" ref={inpFirstNameRef} />
             <div className="self-start">Last name</div>
-            <input type="text" className="w-full p-2 text-white bg-slate-800 rounded-md" ref={lastNameRef} />
+            <input type="text" className="w-full p-2 text-white bg-slate-800 rounded-md" ref={inpLastNameRef} />
             <div className="self-start">User name</div>
-            <input type="text" className= "w-full p-2 text-blawhiteck bg-slate-800 rounded-md" ref={userNameRef} />
+            <input type="text" className= "w-full p-2 text-blawhiteck bg-slate-800 rounded-md" ref={inpUserNameRef} />
             <div className="self-start">Email</div>
-            <input type="email" className="w-full p-2 text-white bg-slate-800 rounded-md" ref={emailRef} />
+            <input type="email" className="w-full p-2 text-white bg-slate-800 rounded-md" ref={inpEmailRef} />
             <div className="self-start pt-2">Password</div>
-            <input type="password" className= "w-full p-2 mb-4 text-white bg-slate-800 rounded-md" ref={passwordRef} />
-            <button type="submit" className="w-full py-2 text-white bg-blue-400 rounded-md" onClick={(e) => {
-                e.preventDefault()
-                registerUser()
-            }}>
-                Register</button>
+            <input type="password" className= "w-full p-2 mb-4 text-white bg-slate-800 rounded-md" ref={inpPasswordRef} />
+            <button type="submit" className="w-full py-2 text-white bg-blue-400 rounded-md" ref={btnRegisterRef}>Register</button>
         </div>
     </div>
 )
