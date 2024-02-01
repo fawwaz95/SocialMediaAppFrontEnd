@@ -1,18 +1,81 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import {loginUser} from '../../actions/loginAction';
 
 const ProfileWidget = () => {
     const userInfoState = useSelector((state) => state.userInfo);
+    const dispatch = useDispatch();
     const [editIcon, setEditIcon] = useState(false);
+    const [profileData, setProfileData] = useState({});
+    const inpUserNameRef = useRef();
+    const inpFirstNameRef = useRef();
+    const inpLastNameRef = useRef();
+    const inpLocationRef = useRef();
+    const inpBioRef = useRef();
+    const btnDoneRef = useRef();
 
     useEffect(() => {
-        console.log("Checking userInfoState ");
+        console.log("Heres state changes......");
         console.log(userInfoState);
+
+        if(editIcon){
+            console.log("Now were setting...... ");
+            setEventListeners();
+        }
     }, [editIcon, userInfoState])
 
     const clickEditIcon = () => {
         setEditIcon(current => !current);
-        console.log("Checking edit " + editIcon);
+    }
+
+    const handleKeyDown = async (event) => {
+        if (event.key === "Enter"){
+            event.preventDefault();
+            console.log(event.key);
+            await editProfile();
+            clickEditIcon();
+        }
+    }
+
+    const handleClick = async (event) => {
+        event.preventDefault();
+        console.log("Clicked done");
+        await editProfile();
+        clickEditIcon();
+    }
+
+    const editProfile = async () => {
+        const postMethod = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                findUser: userInfoState.userInfo.userName,
+                userName: inpUserNameRef.current.value,
+                firstName: inpFirstNameRef.current.value,
+                lastName: inpLastNameRef.current.value,
+                location: inpLocationRef.current.value,
+                bio: inpBioRef.current.value,
+            })
+        };
+
+        const response = await fetch("http://localhost:3001/routes/editProfile", postMethod);
+        if(!response.ok){
+            throw("Http error in editProfile " + response.status);
+        }
+
+        const data = await response.json();
+        console.log("EDIT PROFILE WORKED");
+        console.log(data);
+        dispatch(loginUser(data))
+    }
+
+    const setEventListeners = () => {
+        inpUserNameRef.current.addEventListener("keydown", handleKeyDown);
+        inpFirstNameRef.current.addEventListener("keydown", handleKeyDown);
+        inpLastNameRef.current.addEventListener("keydown", handleKeyDown);
+        inpLocationRef.current.addEventListener("keydown", handleKeyDown);
+        inpBioRef.current.addEventListener("keydown", handleKeyDown);
+        btnDoneRef.current.addEventListener("click", handleClick);
     }
 
     //handle redux if its still loading.....create a loading component later..........
@@ -27,7 +90,7 @@ const ProfileWidget = () => {
                         <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" />
                         <div className="flex-1 pl-4">
                             <div>{userInfoState.userInfo.firstName + " " + userInfoState.userInfo.lastName} </div>
-                            <div className="text-start text-xs text-slate-400"> 25 Friends</div>
+                            <div className="text-start text-xs text-slate-400"> {userInfoState.userInfo.friends ? userInfoState.userInfo.friends + " Friends" : ""}</div>
                         </div>
                         <div className="pr-2">
                             <a href="#" onClick={() => clickEditIcon()}><img src="/images/edit_icon.svg" className="h-4 w-4" /></a>
@@ -36,33 +99,34 @@ const ProfileWidget = () => {
                     <div className="flex flex-col pt-4 pb-4 pb-2 border-b">
                         <div className="flex">
                             <div className="pr-4"> <img src="/images/location_icon.svg" className="h-4" /> </div>
-                            <div className="text-xs text-slate-400"> Toronto, ON </div>
+                            <div className="text-xs text-slate-400"> {userInfoState.userInfo.location ? userInfoState.userInfo.location : ""} </div>
                         </div>
                         <div className="flex py-2">
                             <div className="pr-4"> <img src="/images/bio_icon.svg" className="h-4" /> </div>
-                            <div className="text-start text-xs text-slate-400"> Turn the 6 upside down its a 9 now. Toronto Raptors </div>
+                            <div className="text-start text-xs text-slate-400"> {userInfoState.userInfo.bio ? userInfoState.userInfo.bio : ""} </div>
                         </div>
                     </div>
                 </div>
             }
+            {/*Create a seperate popup component later..........*/}
             {editIcon && (
-                <div className="h-auto fixed top-20 left-80 bg-zinc-900 w-1/2 h-1/2 flex justify-center items-center"> {/*adjust so form is in exact center of screen later....*/}
+                <div className="h-auto fixed top-20 left-80 bg-zinc-500 w-1/2 h-1/2 flex justify-center items-center rounded-md" > {/*adjust so form is in exact center of screen later....*/}
                     <div>
                         <div className="flex flex-col items-center justify-center gap-2 w-96 p-2 text-white text-xs">
                             <div className="self-start">
                                 <div className="text-xl text-blue-400 py-4"> Edit Profile </div>
                             </div>
                             <div className="self-start">Username</div>
-                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" />
+                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpUserNameRef} />
                             <div className="self-start">First name</div>
-                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" />
+                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpFirstNameRef} />
                             <div className="self-start">Last name</div>
-                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" />
+                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpLastNameRef} />
                             <div className="self-start">Location</div>
-                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" />
+                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpLocationRef} />
                             <div className="self-start">Bio</div>
-                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" />
-                            <button type="submit" className="w-full my-2 p-2 text-white bg-slate-800 rounded-md"> Done </button>
+                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpBioRef} />
+                            <button type="submit" className="w-1/4 my-2 p-2 text-white bg-slate-800 rounded-md self-start" ref={btnDoneRef}> Done </button>
                         </div>
                     </div>
                 </div>
