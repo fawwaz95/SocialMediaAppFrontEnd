@@ -6,7 +6,7 @@ const ProfileWidget = () => {
     const userInfoState = useSelector((state) => state.userInfo);
     const dispatch = useDispatch();
     const [editIcon, setEditIcon] = useState(false);
-    const [profileData, setProfileData] = useState({});
+    const [errorMsg, setErrorMsg] = useState({});
     const inpUserNameRef = useRef();
     const inpFirstNameRef = useRef();
     const inpLastNameRef = useRef();
@@ -19,14 +19,17 @@ const ProfileWidget = () => {
         console.log(userInfoState);
 
         if(editIcon){
-            console.log("Fetching inital user Profile data.....");
+            console.log("Set event listeners.....");
             setEventListeners();
-            console.log("Passing username like this: " + userInfoState.userInfo.userName);
-            fetchUserProfile();
         }
+
+        return(() => {
+            console.log("Emptying errorMsg hook....");
+            setErrorMsg("");
+        })
     }, [editIcon, userInfoState])
 
-    const clickEditIcon = () => {
+    const toggleEditIcon = () => {
         setEditIcon(current => !current);
     }
 
@@ -35,7 +38,6 @@ const ProfileWidget = () => {
             event.preventDefault();
             console.log(event.key);
             await editProfile();
-            clickEditIcon();
         }
     }
 
@@ -43,26 +45,6 @@ const ProfileWidget = () => {
         event.preventDefault();
         console.log("Clicked done");
         await editProfile();
-        clickEditIcon();
-    }
-
-    const fetchUserProfile = async () => {
-        try{
-            const response = await fetch(`http://localhost:3001/routes/getProfile/userName?userName=${userInfoState.userInfo.userName}`);
-
-            /*if(!response.ok){
-                throw(`Http error in fetchUserProfile ${response.status}`);
-            }*/
-    
-            const data = await response.json();
-            console.log("The fetch user profile data.....");
-            console.log(data);
-            setProfileData(data);
-        }catch(error){
-            console.log("Heres the error fetchUserProfile....handle it " + error);
-            console.log(error);
-        }
-   
     }
 
     const editProfile = async () => {
@@ -81,20 +63,22 @@ const ProfileWidget = () => {
             };
     
             const response = await fetch("http://localhost:3001/routes/editProfile", postMethod);
-    
-            /*if(!response.ok){
-                throw("Http error in editProfile " + response.status);
-            }*/
-    
             const data = await response.json();
+
+            if(!data._id){
+                throw {success: data.success, message: data.message}
+            }
+
             console.log("EDIT PROFILE WORKED");
             console.log(data);
             dispatch(loginUser(data))
-        }catch(error){
-            console.log("Heres the error editProfile....handle it " + error);
-            console.log(error);
-        }
+            toggleEditIcon();
 
+        }catch(error){
+            console.log("Heres the error editProfile....handle it ");
+            console.log(error);
+            setErrorMsg(error);
+        }
     }
 
     const setEventListeners = () => {
@@ -121,7 +105,7 @@ const ProfileWidget = () => {
                             <div className="text-start text-xs text-slate-400"> {userInfoState.userInfo.friends ? userInfoState.userInfo.friends + " Friends" : ""}</div>
                         </div>
                         <div className="pr-2">
-                            <a href="#" onClick={() => clickEditIcon()}><img src="/images/edit_icon.svg" className="h-4 w-4" /></a>
+                            <a href="#" onClick={() => toggleEditIcon()}><img src="/images/edit_icon.svg" className="h-4 w-4" /></a>
                         </div>
                     </div>
                     <div className="flex flex-col pt-4 pb-4 pb-2 border-b">
@@ -145,21 +129,19 @@ const ProfileWidget = () => {
                                 <div className="text-xl text-blue-400 py-4"> Edit Profile </div>
                             </div>
 
-                            <div> {profileData.success === false && profileData.message}</div>
+                            <div> {errorMsg.success === false && errorMsg.message}</div>
                             <div className="self-start">Username</div>
-                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpUserNameRef} placeholder={profileData && profileData.userName}/>
+                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpUserNameRef} placeholder={userInfoState.userInfo.userName}/>
                             
-                            <div> {profileData.success === false && profileData.message}</div>
                             <div className="self-start">First name</div>
-                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpFirstNameRef} placeholder={profileData && profileData.firstName}/>
+                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpFirstNameRef} placeholder={userInfoState.userInfo.firstName}/>
                             
-                            <div> {profileData.success === false && profileData.message}</div>
                             <div className="self-start">Last name</div>
-                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpLastNameRef} placeholder={profileData && profileData.lastName}/>
+                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpLastNameRef} placeholder={userInfoState.userInfo.lastName}/>
                             <div className="self-start">Location</div>
-                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpLocationRef} placeholder={profileData && profileData.location}/>
+                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpLocationRef} placeholder={userInfoState.userInfo.location}/>
                             <div className="self-start">Bio</div>
-                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpBioRef} placeholder={profileData && profileData.bio}/>
+                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpBioRef} placeholder={userInfoState.userInfo.bio}/>
                             <button type="submit" className="w-1/4 my-2 p-2 text-white bg-slate-800 rounded-md self-start" ref={btnDoneRef}> Done </button>
                         </div>
                     </div>
