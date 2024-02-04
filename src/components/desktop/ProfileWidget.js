@@ -19,8 +19,10 @@ const ProfileWidget = () => {
         console.log(userInfoState);
 
         if(editIcon){
-            console.log("Now were setting...... ");
+            console.log("Fetching inital user Profile data.....");
             setEventListeners();
+            console.log("Passing username like this: " + userInfoState.userInfo.userName);
+            fetchUserProfile();
         }
     }, [editIcon, userInfoState])
 
@@ -44,29 +46,55 @@ const ProfileWidget = () => {
         clickEditIcon();
     }
 
-    const editProfile = async () => {
-        const postMethod = {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                findUser: userInfoState.userInfo.userName,
-                userName: inpUserNameRef.current.value,
-                firstName: inpFirstNameRef.current.value,
-                lastName: inpLastNameRef.current.value,
-                location: inpLocationRef.current.value,
-                bio: inpBioRef.current.value,
-            })
-        };
+    const fetchUserProfile = async () => {
+        try{
+            const response = await fetch(`http://localhost:3001/routes/getProfile/userName?userName=${userInfoState.userInfo.userName}`);
 
-        const response = await fetch("http://localhost:3001/routes/editProfile", postMethod);
-        if(!response.ok){
-            throw("Http error in editProfile " + response.status);
+            /*if(!response.ok){
+                throw(`Http error in fetchUserProfile ${response.status}`);
+            }*/
+    
+            const data = await response.json();
+            console.log("The fetch user profile data.....");
+            console.log(data);
+            setProfileData(data);
+        }catch(error){
+            console.log("Heres the error fetchUserProfile....handle it " + error);
+            console.log(error);
+        }
+   
+    }
+
+    const editProfile = async () => {
+        try{
+            const postMethod = {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    findUser: userInfoState.userInfo.userName,
+                    userName: inpUserNameRef.current.value ? inpUserNameRef.current.value : userInfoState.userInfo.userName,
+                    firstName: inpFirstNameRef.current.value ? inpFirstNameRef.current.value : userInfoState.userInfo.firstName,
+                    lastName: inpLastNameRef.current.value ? inpLastNameRef.current.value : userInfoState.userInfo.lastName,
+                    location: inpLocationRef.current.value,
+                    bio: inpBioRef.current.value,
+                })
+            };
+    
+            const response = await fetch("http://localhost:3001/routes/editProfile", postMethod);
+    
+            /*if(!response.ok){
+                throw("Http error in editProfile " + response.status);
+            }*/
+    
+            const data = await response.json();
+            console.log("EDIT PROFILE WORKED");
+            console.log(data);
+            dispatch(loginUser(data))
+        }catch(error){
+            console.log("Heres the error editProfile....handle it " + error);
+            console.log(error);
         }
 
-        const data = await response.json();
-        console.log("EDIT PROFILE WORKED");
-        console.log(data);
-        dispatch(loginUser(data))
     }
 
     const setEventListeners = () => {
@@ -116,16 +144,22 @@ const ProfileWidget = () => {
                             <div className="self-start">
                                 <div className="text-xl text-blue-400 py-4"> Edit Profile </div>
                             </div>
+
+                            <div> {profileData.success === false && profileData.message}</div>
                             <div className="self-start">Username</div>
-                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpUserNameRef} />
+                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpUserNameRef} placeholder={profileData && profileData.userName}/>
+                            
+                            <div> {profileData.success === false && profileData.message}</div>
                             <div className="self-start">First name</div>
-                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpFirstNameRef} />
+                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpFirstNameRef} placeholder={profileData && profileData.firstName}/>
+                            
+                            <div> {profileData.success === false && profileData.message}</div>
                             <div className="self-start">Last name</div>
-                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpLastNameRef} />
+                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpLastNameRef} placeholder={profileData && profileData.lastName}/>
                             <div className="self-start">Location</div>
-                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpLocationRef} />
+                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpLocationRef} placeholder={profileData && profileData.location}/>
                             <div className="self-start">Bio</div>
-                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpBioRef} />
+                            <input type="text" className="w-full p-1 text-white bg-slate-800 rounded-md" ref={inpBioRef} placeholder={profileData && profileData.bio}/>
                             <button type="submit" className="w-1/4 my-2 p-2 text-white bg-slate-800 rounded-md self-start" ref={btnDoneRef}> Done </button>
                         </div>
                     </div>
