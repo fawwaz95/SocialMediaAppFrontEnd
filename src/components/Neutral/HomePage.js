@@ -38,7 +38,7 @@ const Homepage = () => {
             </>
           ) : (
             <div className=""> {/*These classes arent taking any effects.....className="m-4 pt-20 w-full"*/}
-              <NewsfeedPage/>
+             <NewsfeedPage/>
               <div>
                 <a href="#">
                   <img
