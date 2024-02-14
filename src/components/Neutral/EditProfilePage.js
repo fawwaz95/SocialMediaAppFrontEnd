@@ -76,7 +76,7 @@ const EditProfilePage = () => {
             navigate("/");
 
         }catch(error){
-            console.log("Heres the error editProfile....handle it ");
+            console.log("Heres the error editProfile....handle it");
             console.log(error);
             setErrorMsg(error);
         }
