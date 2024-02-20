@@ -7,7 +7,7 @@ const PostWidget = () => {
     const [uploadFile, setUploadFile] = useState({});
 
     useEffect(() => {
-        console.log("Useeffecting.......Post widget");
+        console.log("Use effecting.......Post widget");
         console.log(uploadFile);
 
         if(uploadFile && uploadFile.name){
