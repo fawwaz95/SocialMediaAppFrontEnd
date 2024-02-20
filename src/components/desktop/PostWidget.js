@@ -38,9 +38,6 @@ const PostWidget = () => {
 
         const postMethod = {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
             body: formData,
         };
 
