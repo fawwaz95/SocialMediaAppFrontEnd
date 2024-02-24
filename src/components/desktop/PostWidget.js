@@ -44,7 +44,8 @@ const PostWidget = () => {
         const response = await fetch("http://localhost:3001/routes/fileUpload", postMethod);
         const data = await response.json();
 
-        console.log("Heres the data fetchEndpoint " + data);
+        console.log("Heres the data fetchEndpoint ");
+        console.log(data);
     }
 
     return (
