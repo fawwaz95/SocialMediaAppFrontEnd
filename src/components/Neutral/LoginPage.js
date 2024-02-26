@@ -75,6 +75,8 @@ const LoginPage = () => {
             }
 
             const data = await response.json();
+            console.log("Login data");
+            console.log(data);
             setLoginInfo(data);
             dispatch(loginUser(data));
             

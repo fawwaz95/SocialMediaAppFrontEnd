@@ -1,10 +1,12 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const PostWidget = () => {
     const fileInputRef = useRef(null);
     const [uploadFile, setUploadFile] = useState({});
+    const userInfoState = useSelector((state) => state.userInfo);
 
     useEffect(() => {
         console.log("Use effecting.......Post widget");
@@ -14,7 +16,7 @@ const PostWidget = () => {
              fetchEndpoint(uploadFile);
         }
 
-    }, [uploadFile])
+    }, [uploadFile, userInfoState])
 
     const handleClick = () => {
         fileInputRef.current.click();
@@ -32,6 +34,7 @@ const PostWidget = () => {
 
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('email', userInfoState.userInfo.email);
 
         console.log("Form data");
         console.log(formData);
