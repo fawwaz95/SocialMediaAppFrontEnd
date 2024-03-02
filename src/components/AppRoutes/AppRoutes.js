@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from '../Neutral/HomePage';
 import LoginPage from '../Neutral/LoginPage';
 import RegisterPage from '../Neutral/RegisterPage';
-import ProfilePage from '../Mobile/ProfilePage';
+import ProfilePage from '../Neutral/ProfilePage';
 import EditProfilePage from '../Neutral/EditProfilePage';
 import NewsfeedWidget from '../Desktop/NewsfeedWidget';
 import NewsfeedPage from '../Mobile/NewsfeedPage';

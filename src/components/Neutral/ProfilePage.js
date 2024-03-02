@@ -19,6 +19,8 @@ const Profile = () => {
         console.log(userInfoState);
         console.log("Lets see the data.....");
         console.log(userUploads);
+
+        console.log(userUploads.length);
     }, [userInfoState]);
 
     const fetchUserUploads = async () => {
@@ -57,42 +59,28 @@ const Profile = () => {
                                 <div> 10 </div>
                             </div>
                         </div>
-                        <div className="text-white text-center w-40">
+                        <div className="text-white text-center w-40 font-bold">
                             {userInfoState.userInfo.firstName + " " + userInfoState.userInfo.lastName}
                         </div>
-                        <div className="relative grid grid-cols-3 sm:grid-cols-3 gap-4 text-white py-4 pr-10"> {/*pt-80*/}
-
-                        {
-                            userUploads.length > 0 && userUploads.map((arrayItems, index) => (
-                                <div className="hover:bg-sky-700 text-center rounded-xl relative" key={index}>
-                                    <img src={arrayItems.url} alt="" className="h-24 sm:h-48 w-full object-cover"/>
-                                </div>
-                            ))
-                        }
-                       
-
-
-
-
-
-
-
-                            { /*{content.map((contentArray, index) => (
-                                <div
-                                    className="hover:bg-sky-700 text-center rounded-xl relative"
-                                    key={index}
-                                    onMouseEnter={() => setContentIndex(index)}
-                                    onMouseLeave={() => setHoveredDesc(null)}
-                                >
-                                    <img src={contentArray.img} className="h-24 sm:h-48 w-full object-cover" alt="Content" />
-                                    {contentIndex !== null && contentIndex === index && (
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <div>{contentArray.desc}</div>
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                                    */}
+                        <div className="text-white text-center w-40">
+                            {userInfoState.userInfo.bio}
+                        </div>
+                        <div className="h-screen">
+                            {
+                            userUploads && userUploads.message ?
+                            <div className="flex flex-col align-center justify-center">
+                                <img src="images/No_Posts.svg" className="h-24 sm:h-32"/>
+                                <p className="flex align-center justify-center text-white text-xl"> {userUploads.message} </p>
+                            </div> 
+                            :
+                            <div className="relative grid grid-cols-3 sm:grid-cols-3 gap-4 text-white py-4 pr-10">
+                                {userUploads.map((arrayItems, index) => (
+                                    <div className="" key={index}>
+                                        <img src={arrayItems.url} alt="test" className="h-24 sm:h-48 w-full object-cover"/>
+                                    </div>
+                                ))}
+                            </div>
+                            }
                         </div>
                     </div>
             }
