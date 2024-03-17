@@ -13,15 +13,9 @@ const PostWidget = () => {
     useEffect(() => {
         console.log("Use effecting.......Post widget");
         console.log(uploadFile);
-    
-        if(uploadFile && uploadFile.name && !isUploading){
-            setIsUploading(true);
-            uploadPost(uploadFile);
-        }
-    
     }, [uploadFile, userInfoState, uploadUrl, isUploading])
 
-    const handleClick = () => {
+    const handleUploadIconClick = () => {
         fileInputRef.current.click();
       };
 
@@ -29,12 +23,29 @@ const PostWidget = () => {
         const file = event.target.files;
         console.log('Selected files:', file[0].name);
         setUploadFile(file[0]);
+        showFileUpload(file[0].name);
     };
 
-    const uploadPost = async (file) => {
+    const showFileUpload = async (fileName) => {
+        setTimeout(async () => {
+            console.log("calling after 1 seconds for reindexing......");
+            console.log(fileName);
+            await setUserUpload(fileName);
+        }, 1000);
+    }
+
+    const setUserUpload = async (userUpload) => {
+        console.log("User upload? " + userUpload);
+        const setFilePath = `images\\${userUpload}`;
+        setUploadUrl(setFilePath);
+    }
+
+    const uploadPost = async () => {
+        console.log("Inside Upload post function");
+        console.log(uploadFile);
         try{
             const formData = new FormData();
-            formData.append('file', file);
+            formData.append('file', uploadFile);
             formData.append('email', userInfoState.userInfo.email);
     
             const postMethod = {
@@ -47,23 +58,18 @@ const PostWidget = () => {
     
             console.log("Heres the data uploadPost: ");
             console.log(data);
+
+            await clearUploadData();
     
-            setTimeout(async () => {
-                console.log("calling after 2.5 seconds for reindexing......");
-                await fetchUserUpload(data.cloudinaryResult.public_id);
-            }, 2500);
         }catch(error){
             console.error(error);
         }
     }
 
-    const fetchUserUpload = async (publicId) =>{
-        const response = await fetch(`http://localhost:3001/routes/getUserUpload?publicId=${publicId}`);
-        const data = await response.json();
-
-        console.log("Got the single post?");
-        console.log(data);
-        setUploadUrl(data[0].url);
+    const clearUploadData = async () => {
+        await setUploadFile({});
+        await setIsUploading(false);
+        await setUploadUrl("");
     }
 
     return (
@@ -78,7 +84,7 @@ const PostWidget = () => {
                     <div>Camera</div>
                 </div>
                 <div className="flex items-center">
-                    <a href="#" onClick={handleClick}> <img src="/images/upload_icon.svg" className="h-8 pr-2" /> </a>
+                    <a id="uploadIcon" href="#" onClick={handleUploadIconClick}> <img src="/images/upload_icon.svg" className="h-8 pr-2" /> </a>
                     <input
                         type="file"
                         ref={fileInputRef}
@@ -86,9 +92,9 @@ const PostWidget = () => {
                         onChange={handleFileChange}
                     />
                     <div>Upload</div>
-                    {uploadUrl && <img src={uploadUrl} alt="Upload Img" className="h-8"></img>}
+                    {uploadUrl && <img src={uploadUrl} alt="Upload Img" className="h-8 m-2"></img>}
                 </div>
-                <button className="bg-sky-900 pl-8 pr-8 py-2 rounded-full"> Post </button>
+                <button id="postBtn" className="bg-sky-900 pl-8 pr-8 py-2 rounded-full" onClick={uploadPost}> Post </button>
            </div>
         </div>
     )
