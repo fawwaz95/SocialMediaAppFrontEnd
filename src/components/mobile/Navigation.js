@@ -4,7 +4,7 @@ const Navigation = () => {
     return (
         <div className="fixed w-full flex flex-col bottom-0 p-4 text-white bg-slate-700 z-50">
             <div>
-                <Link to="/Profile"> Profile</Link>
+                <Link to="/Profile"> Profile </Link>
             </div>
             <div> 
                 <Link to="/Friends"> Friends </Link>
