@@ -9,6 +9,8 @@ import EditProfilePage from '../Neutral/EditProfilePage';
 import NewsfeedWidget from '../Desktop/NewsfeedWidget';
 import NewsfeedPage from '../Mobile/NewsfeedPage';
 import FriendslistPage from '../Mobile/FriendslistPage';
+import OpenProfileImg from '../Neutral/OpenProfileImg';
+import { useEffect } from 'react';
 
 const AppRoutes = () => {
     return (
@@ -21,6 +23,7 @@ const AppRoutes = () => {
             <Route path="/Newsfeed" element={<NewsfeedWidget />} />
             <Route path="/NewsfeedMobile" element={<NewsfeedPage />} />
             <Route path="/Friends" element={<FriendslistPage />} />
+            <Route path="/OpenProfileImg" element={<OpenProfileImg />} />
         </Routes>
     )
 }
