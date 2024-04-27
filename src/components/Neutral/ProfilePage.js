@@ -4,6 +4,7 @@
 import { useEffect, useState, useRef} from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import OpenProfileImg from '../Neutral/OpenProfileImg';
 
 const Profile = () => {
     const userInfoState = useSelector((state) => state.userInfo);
@@ -11,6 +12,7 @@ const Profile = () => {
     const [contentIndex, setContentIndex] = useState(null); // Set initial state as null
     const [userUploads, setUserUploads] = useState([]);
     const [activeImage, setActiveImage] = useState("");
+    const [openImage, setOpenImage] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -23,14 +25,14 @@ const Profile = () => {
         console.log("Lets see the data.....");
         console.log(userUploads);
         console.log(userUploads.length);*/
-        console.log("What is the active image index...." + activeImage);
+        console.log("What is the active image url...." + activeImage);
 
-        if (activeImage !== "" && navigate) {
+        /*if (activeImage !== "" && navigate) {
             console.log("GO TO /OpenProfileImg route");
-            navigate("/OpenProfileImg");
-        }
+            navigate("/OpenProfileImg", {state: {activeImage: activeImage}}); //When using 'navigate' need to pass prop using 'state'
+        }*/
 
-    }, [userInfoState, activeImage, navigate]);
+    }, [userInfoState, activeImage, setOpenImage, navigate]); //activeImage,
 
     const fetchUserUploads = async () => {
         const response = await fetch(`http://localhost:3001/routes/getAllUserUploads?email=${userInfoState.userInfo.email}`);
@@ -41,12 +43,13 @@ const Profile = () => {
         setUserUploads(data);
     }
 
-    const selectedImage = (index) => {
-        setActiveImage(index);
+    const selectedImage = (url) => {
+        setActiveImage(url);
+        setOpenImage(true);
     }
 
     return (
-        <div className="pl-10 overflow-y-auto">
+        <div className={openImage ? "blur-sm pl-10 overflow-y-auto": "bg-amber-500 pl-10 overflow-y-auto"}>
             {
                 !userInfoState ?
                     <div>
@@ -86,10 +89,10 @@ const Profile = () => {
                                 <p className="flex align-center justify-center text-white text-xl"> {userUploads.message} </p>
                             </div> 
                             :
-                            <div className="h-screen bg-zinc-900">
+                            <div className="h-screen">
                                 <div className="relative grid grid-cols-3 sm:grid-cols-3 gap-4 text-white py-4 pr-10">
                                     {userUploads.map((arrayItems, index) => (
-                                        <div className="" key={index} onClick= {()=>selectedImage(index)} >
+                                        <div className="" key={index} onClick= {()=>selectedImage(arrayItems.url)} >
                                             <img src={arrayItems.url} alt="test" className="h-24 sm:h-48 w-full object-cover"/>
                                         </div>
                                     ))}
@@ -100,8 +103,10 @@ const Profile = () => {
                     </div>
             }
         </div>
-
     )
 }
 
 export default Profile;
+
+{openImage && <OpenProfileImg img={activeImage}/>}
+
