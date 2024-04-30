@@ -108,5 +108,3 @@ const Profile = () => {
 
 export default Profile;
 
-{openImage && <OpenProfileImg img={activeImage}/>}
-
