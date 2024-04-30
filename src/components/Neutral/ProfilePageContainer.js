@@ -34,7 +34,7 @@ const ProfileContainerPage = () => {
     )
 }
 
-    const Profile = ( {selectedImage, openImage, userUploads} ) => {
+    const Profile = ( {selectedImage, openImage, userUploads, userInfoState} ) => {
         
         return (
             <div className={openImage ? "blur-sm pl-10 overflow-y-auto" : "bg-amber-500 pl-10 overflow-y-auto"}>
