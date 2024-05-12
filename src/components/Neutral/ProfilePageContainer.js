@@ -12,6 +12,10 @@ const ProfileContainerPage = () => {
         setOpenImage(true);
     };
 
+    const showProfile = () => {
+        setOpenImage(false);
+    }
+
     useEffect(() => {
         console.log("CONTAINERRRRRRRRRR");
         fetchUserUploads();
@@ -28,16 +32,19 @@ const ProfileContainerPage = () => {
 
     return (
         <div>
-            <Profile imageUrl={imageUrl} selectedImage={selectedImage} userUploads={userUploads} userInfoState={userInfoState}/>
-            {openImage && <OpenProfileImg imageUrl={imageUrl} />}
+            {
+                openImage ?
+                <OpenProfileImg imageUrl={imageUrl} showProfile={showProfile}/> : 
+                <Profile imageUrl={imageUrl} selectedImage={selectedImage} userUploads={userUploads} userInfoState={userInfoState}/>
+            }
         </div>
     )
 }
 
-    const Profile = ( {selectedImage, openImage, userUploads, userInfoState } ) => {
+    const Profile = ( {selectedImage, userUploads, userInfoState } ) => {
         
         return (
-            <div className={openImage ? "blur-sm pl-10 overflow-y-auto" : "bg-amber-500 pl-10 overflow-y-auto"}>
+            <div className="pl-10 overflow-y-auto">
                 {
                     !userInfoState ?
                         <div>
@@ -94,9 +101,10 @@ const ProfileContainerPage = () => {
         )
     }
 
-    const OpenProfileImg = ({imageUrl}) => {
+    const OpenProfileImg = ({imageUrl, showProfile}) => {
         return (
             <div className="h-screen pt-20 flex align-center justify-center text-green text-xl bg-zinc-900 z-50">
+                <a href="#"><img src="images/close_icon.svg" alt="closebtn" className="fixed right-5 h-4 w-auto" onClick={showProfile}/></a>
                 <img src={imageUrl} alt="profile_image" className="p-10" />
             </div>
         )
