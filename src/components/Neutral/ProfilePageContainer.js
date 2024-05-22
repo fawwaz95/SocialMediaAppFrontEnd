@@ -25,7 +25,7 @@ const ProfileContainerPage = () => {
         const response = await fetch(`http://localhost:3001/routes/getAllUserUploads?email=${userInfoState.userInfo.email}`);
         const data = await response.json();
 
-        console.log("USER PROFILE");
+        console.log("USER PROFILE ");
         console.log(data);
         setUserUploads(data);
     }
