@@ -53,7 +53,7 @@ const Profile = () => {
             {
                 !userInfoState ?
                     <div>
-                        Loading...............
+                        Loading..............
                     </div>
                     :
                     <div>
