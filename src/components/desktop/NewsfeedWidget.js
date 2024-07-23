@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { useIsMobile } from '../../contexts/MobileContext';
 
 import NewsfeedPage from '../Mobile/NewsfeedPage';
@@ -12,16 +12,20 @@ const NewsfeedWidget = () => {
         getNewsfeed();
     },[]);
 
-
     const getNewsfeed = async () => {
         const results = await fetch(`http://localhost:3001/routes/getNewsfeed`);
         const  data = await results.json();
 
-
         console.log("The results.......");
         console.log(data);
-        setNewsfeed( data );
+        setNewsfeed(data);
     }
+
+    const setClickEvent = async (e) => {
+        console.log("Clicked follow button");
+        console.log("Need to create a new route, that will save the username into a friends table?")
+    }
+
 
     return (
         <div>
@@ -37,7 +41,7 @@ const NewsfeedWidget = () => {
                                     <div>{item.userName}</div>
                                     <div className="text-slate-400">{item.location}</div>
                                 </div>
-                                <div className="flex m-auto justify-between p-2 bg-slate-700 rounded-full mr-4">
+                                <div onClick={(e) => setClickEvent(e)} className="flex m-auto justify-between p-2 bg-slate-700 rounded-full mr-4">
                                     <a href="#">
                                         <img src="images/following_icon.svg" className="h-5" alt="Follow" />
                                     </a>

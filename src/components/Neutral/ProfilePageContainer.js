@@ -59,7 +59,7 @@ const ProfileContainerPage = () => {
                                 <img src="images/profile_image.jpg" className="h-24 w-24 sm:h-40 sm:w-40 rounded-full" />
                                 <div>
                                     Posts
-                                    <div> 10</div>
+                                    <div> {userUploads.length} </div>
                                 </div>
                                 <div>
                                     Friends
