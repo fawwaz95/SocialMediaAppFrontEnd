@@ -1,16 +1,18 @@
 import { useEffect, useState, useContext, useRef } from 'react';
 import { useIsMobile } from '../../contexts/MobileContext';
+import { useSelector } from 'react-redux';
 
 import NewsfeedPage from '../Mobile/NewsfeedPage';
 
 const NewsfeedWidget = () => {
     const isMobile = useIsMobile();
     const [newsfeed, setNewsfeed] = useState([]);
+    const userInfoState = useSelector((state) => state.userInfo);
 
     useEffect(() => {
         console.log("Newsfeed.......useEffect......");
         getNewsfeed();
-    },[]);
+    },[userInfoState]);
 
     const getNewsfeed = async () => {
         const results = await fetch(`http://localhost:3001/routes/getNewsfeed`);
@@ -21,9 +23,36 @@ const NewsfeedWidget = () => {
         setNewsfeed(data);
     }
 
-    const setClickEvent = async (e) => {
+    const followFriend = async (event, item) => {
+        event.preventDefault();
         console.log("Clicked follow button");
-        console.log("Need to create a new route, that will save the username into a friends table?")
+        console.log("Need to create a new route, that will save the username into a friends table?");
+        console.log(userInfoState.userInfo.userName);
+        console.log("item");
+        console.log(item);
+
+        const postMethod = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userName: userInfoState.userInfo.userName,
+                    friendUserName: item.userName,
+                })
+        }             
+        
+
+        const response = await fetch("http://localhost:3001/routes/followFriend", postMethod);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        console.log("The result.......followFriend");
+        console.log(result);
     }
 
 
@@ -41,7 +70,7 @@ const NewsfeedWidget = () => {
                                     <div>{item.userName}</div>
                                     <div className="text-slate-400">{item.location}</div>
                                 </div>
-                                <div onClick={(e) => setClickEvent(e)} className="flex m-auto justify-between p-2 bg-slate-700 rounded-full mr-4">
+                                <div onClick={(e)=> followFriend(e, item)} className="flex m-auto justify-between p-2 bg-slate-700 rounded-full mr-4">
                                     <a href="#">
                                         <img src="images/following_icon.svg" className="h-5" alt="Follow" />
                                     </a>
