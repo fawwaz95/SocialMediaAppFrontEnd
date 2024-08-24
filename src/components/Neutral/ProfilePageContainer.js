@@ -5,6 +5,8 @@ const ProfileContainerPage = () => {
     const [openImage, setOpenImage] = useState(false);
     const [imageUrl, setImageUrl] = useState("");
     const [userUploads, setUserUploads] = useState([]);
+    const [countFollowing, setCountFollowing] = useState(0);
+    const [countFollowers, setCountFollowers] = useState(0);
     const userInfoState = useSelector((state) => state.userInfo);
 
     const selectedImage = (url) => {
@@ -18,7 +20,9 @@ const ProfileContainerPage = () => {
 
     useEffect(() => {
         console.log("CONTAINERRRRRRRRRR");
+        console.log(userInfoState);
         fetchUserUploads();
+        fetchFollowing();
     }, []);
 
     const fetchUserUploads = async () => {
@@ -30,18 +34,44 @@ const ProfileContainerPage = () => {
         setUserUploads(data);
     }
 
+    const fetchFollowing  = async () => {
+        console.log("HELLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+        try {
+            const response = await fetch(`http://localhost:3001/routes/getFollowing?user_id=${userInfoState.userInfo.userName}`);
+            
+            if (!response.ok) {
+                console.log("Unable to fetch getFollowing");
+                return;
+            }
+                
+            const data = await response.json(); //Must resolve promise before deconstruction
+            const { numberOfFollowing, numberOfFollowers } = data.followingFollowersData;
+
+            console.log("number of following");
+            console.log(numberOfFollowing);
+
+            console.log("number of followers");
+            console.log(numberOfFollowers);
+
+            setCountFollowing(numberOfFollowing);
+            setCountFollowers(numberOfFollowers);
+        } catch (error) {
+            console.error("Error fetching fetchFollowing:", error);
+        }
+    }
+
     return (
         <div>
             {
                 openImage ?
                 <OpenProfileImg imageUrl={imageUrl} showProfile={showProfile}/> : 
-                <Profile imageUrl={imageUrl} selectedImage={selectedImage} userUploads={userUploads} userInfoState={userInfoState}/>
+                <Profile imageUrl={imageUrl} selectedImage={selectedImage} userUploads={userUploads} userInfoState={userInfoState} countFollowing={countFollowing} countFollowers={countFollowers}/>
             }
         </div>
     )
 }
 
-    const Profile = ( {selectedImage, userUploads, userInfoState } ) => {
+    const Profile = ( {selectedImage, userUploads, userInfoState, countFollowing, countFollowers } ) => {
         
         return (
             <div className="pl-10 overflow-y-auto">
@@ -62,12 +92,12 @@ const ProfileContainerPage = () => {
                                     <div> {userUploads.length} </div>
                                 </div>
                                 <div>
-                                    Friends
-                                    <div> 10 </div>
+                                    Following
+                                    <div> {countFollowing} </div>
                                 </div>
                                 <div>
                                     Followers
-                                    <div> 10 </div>
+                                    <div> {countFollowers} </div>
                                 </div>
                             </div>
                             <div className="text-white text-center w-40 font-bold">
