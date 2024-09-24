@@ -7,6 +7,8 @@ const ProfileContainerPage = () => {
     const [userUploads, setUserUploads] = useState([]);
     const [countFollowing, setCountFollowing] = useState(0);
     const [countFollowers, setCountFollowers] = useState(0);
+    const [followingData, setFollowingData] = useState([]);
+    const [followersData, setFollowersData] = useState([]);
     const [openFollowingFollowersList, setOpenFollowingFollowersList] = useState(false);
     const userInfoState = useSelector((state) => state.userInfo);
 
@@ -45,10 +47,13 @@ const ProfileContainerPage = () => {
             }
                 
             const data = await response.json(); //Must resolve promise before deconstruction
-            const { numberOfFollowing, numberOfFollowers } = data.followingFollowersData;
+            const { following , followers } = await data.followingFollowersData;
 
-            setCountFollowing(numberOfFollowing);
-            setCountFollowers(numberOfFollowers);
+            setFollowingData(following);
+            setFollowersData(followers);
+
+            console.log("Check the data for following");
+            console.log(followingData);
         } catch (error) {
             console.error("Error fetching fetchFollowing:", error);
         }
@@ -66,8 +71,8 @@ const ProfileContainerPage = () => {
                     selectedImage={selectedImage} 
                     userUploads={userUploads} 
                     userInfoState={userInfoState} 
-                    countFollowing={countFollowing} 
-                    countFollowers={countFollowers} 
+                    countFollowing={followingData.length} 
+                    countFollowers={followersData.length} 
                     showFollowingFollowersList={showFollowingFollowersList} 
                   />
             }
@@ -138,28 +143,76 @@ const OpenProfileImg = ({ imageUrl, showProfile }) => {
 }
 
 const OpenFollowingFollowersList = ( {showProfile} ) => {
-    const [showFollowingList, setShowFollowingList] = useState(false); // Local hook
+    const [showFollowingList, setShowFollowingList] = useState(false);
+    const [showFollowersList, setShowFollowersList] = useState(false);
 
     const showAllFollowing = () => {
-        setShowFollowingList(true); // Toggle following list
+        setShowFollowersList(false);
+        setShowFollowingList(current => !current);
+    };
+
+    const showAllFollowers = () => {
+        setShowFollowingList(false);
+        setShowFollowersList(current => !current);
+    }
+
+    const FollowingList = () => {
+        return (
+            <div class="w-full grid grid-cols-4 grid-rows-2 gap-6 p-4 items-center bg-zinc-800 rounded-lg shadow-md">
+                <div class="row-span-2">
+                    <img 
+                        src="https://via.placeholder.com/150" 
+                        alt="Profile" 
+                        class="h-24 w-24 rounded-full object-cover"
+                    />
+                </div>
+                <div class="col-span-2">
+                    <div class="text-white font-semibold">john_doe</div>
+                </div>
+                <div class="row-span-2 flex justify-end">
+                    <button class="px-4 py-2 bg-red-500 text-white rounded-md">Unfollow</button>
+                </div>
+                <div class="col-span-2">
+                    <div class="text-gray-400 text-sm">Loving life!</div>
+                </div>
+    
+                <div class="row-span-2">
+                    <img 
+                        src="https://via.placeholder.com/150" 
+                        alt="Profile" 
+                        class="h-24 w-24 rounded-full object-cover"
+                    />
+                </div>
+                <div class="col-span-2">
+                    <div class="text-white font-semibold">rick_owens</div>
+                </div>
+                <div class="row-span-2 flex justify-end">
+                    <button class="px-4 py-2 bg-red-500 text-white rounded-md">Unfollow</button>
+                </div>
+                <div class="col-span-2">
+                    <div class="text-gray-400 text-sm">Loving life!</div>
+                </div>
+            </div>
+        );
     };
 
     return (
         <div className="h-screen pt-20 text-white text-xl bg-zinc-900 z-50">
             <a href="#"><img src="images/close_icon.svg" alt="closebtn" className="fixed right-5 h-4 w-auto" onClick={showProfile}/></a>
-            <div className="w-full mt-2 grid grid-cols-2 grid-row-1 flex justify-center align-center">
-                <div onClick={showAllFollowing}>Following</div>
-                <div>Followers</div>
+            <div className="w-full mt-2 mb-2 grid grid-cols-2 grid-row-1 flex justify-center align-center">
+                <div className={showFollowingList && "border-b-2 w-24"} onClick={() => showAllFollowing()}>Following</div>
+                <div className={showFollowersList && "border-b-2 w-24"} onClick={() => showAllFollowers()}>Followers</div>
             </div>
 
-            {showFollowingList && <FollowingFollowersList />}
+            {showFollowingList && <FollowingList />}
+            {showFollowersList && <FollowersList />}
         </div>
     );
 };
 
-const FollowingFollowersList = () => {
+const FollowersList = () => {
     return (
-        <div class="grid grid-cols-5 grid-rows-2 gap-6 p-4 items-center bg-zinc-800 rounded-lg shadow-md">
+        <div class="w-full grid grid-cols-4 grid-rows-2 gap-6 p-4 items-center bg-zinc-800 rounded-lg shadow-md">
             <div class="row-span-2">
                 <img 
                     src="https://via.placeholder.com/150" 
@@ -167,18 +220,34 @@ const FollowingFollowersList = () => {
                     class="h-24 w-24 rounded-full object-cover"
                 />
             </div>
-            <div class="col-span-3">
-                <div class="text-white font-semibold">john_doe</div>
+            <div class="col-span-2">
+                <div class="text-white font-semibold">Fred_doe</div>
             </div>
             <div class="row-span-2 flex justify-end">
-                <button class="px-4 py-2 bg-red-500 text-white rounded-md">Unfollow</button>
+                <button class="px-4 py-2 bg-red-500 text-white rounded-md">Remove</button>
             </div>
-            <div class="col-span-3">
-                <div class="text-gray-400 text-sm">Loving life!</div>
+            <div class="col-span-2">
+                <div class="text-gray-400 text-sm">Working!</div>
             </div>
 
+            <div class="row-span-2">
+                <img 
+                    src="https://via.placeholder.com/150" 
+                    alt="Profile" 
+                    class="h-24 w-24 rounded-full object-cover"
+                />
+            </div>
+            <div class="col-span-2">
+                <div class="text-white font-semibold">Grant_owens</div>
+            </div>
+            <div class="row-span-2 flex justify-end">
+                <button class="px-4 py-2 bg-red-500 text-white rounded-md">Remove</button>
+            </div>
+            <div class="col-span-2">
+                <div class="text-gray-400 text-sm">Entrepeneur!</div>
+            </div>
         </div>
     );
-};
+}
 
 export default ProfileContainerPage;
