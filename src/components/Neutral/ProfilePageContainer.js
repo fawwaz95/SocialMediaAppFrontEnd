@@ -4,12 +4,12 @@ import { useSelector } from 'react-redux';
 const ProfileContainerPage = () => {
     const [openImage, setOpenImage] = useState(false);
     const [imageUrl, setImageUrl] = useState("");
-    const [userUploads, setUserUploads] = useState([]);
-    const [countFollowing, setCountFollowing] = useState(0);
-    const [countFollowers, setCountFollowers] = useState(0);
-    const [followingData, setFollowingData] = useState([]);
-    const [followersData, setFollowersData] = useState([]);
-    const [openFollowingFollowersList, setOpenFollowingFollowersList] = useState(false);
+    const [profileData, setProfileData] = useState({
+        userUploads: [],
+        following: [],
+        followers: []
+    });
+    const [isFollowingListOpen, setOpenFollowingFollowersList] = useState(false);
     const userInfoState = useSelector((state) => state.userInfo);
 
     const selectedImage = (url) => {
@@ -27,57 +27,63 @@ const ProfileContainerPage = () => {
     }
 
     useEffect(() => {
-        fetchUserUploads();
-        fetchFollowing();
+        const fetchAllData = async () => {
+            await fetchUserUploads();
+            await fetchFollowingFollowers();
+        };
+        
+        fetchAllData();
     }, []);
 
     const fetchUserUploads = async () => {
         const response = await fetch(`http://localhost:3001/routes/getAllUserUploads?email=${userInfoState.userInfo.email}`);
         const data = await response.json();
-        setUserUploads(data);
-    }
+    
+        setProfileData(prev => ({
+            ...prev, //...prev means save the previous state in a new object for a reference
+            userUploads: [  //userUploads is the userUplaods array within the setProfileData hook
+                ...prev.userUploads, //...prev means take existing state of useruploads and spread/save into a new array
+                ...data.map(item => item.url) //...data append all new urls into existing userUploads array
+            ]
+        }));
+    };
 
-    const fetchFollowing  = async () => {
+    const fetchFollowingFollowers = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/routes/getFollowing?user_id=${userInfoState.userInfo.userName}`);
+            const response = await fetch(`http://localhost:3001/routes/getFollowingFollowers?user_id=${userInfoState.userInfo.userName}`);
             
-            if (!response.ok) {
-                console.log("Unable to fetch getFollowing");
-                return;
-            }
-                
-            const data = await response.json(); //Must resolve promise before deconstruction
-            const { following , followers } = await data.followingFollowersData;
+            if (!response.ok) throw new Error("Failed to fetch following/followers");
+            
+            const data = await response.json();
+            
+            setProfileData(prev => ({
+                ...prev,
+                following: data.followingFollowersData.following,
+                followers: data.followingFollowersData.followers
+            }));
 
-            setFollowingData(following);
-            setFollowersData(followers);
-
-            console.log("Check the data for following");
-            console.log(followingData);
         } catch (error) {
-            console.error("Error fetching fetchFollowing:", error);
+            console.error(error);
+            alert("There was an error fetching following/followers data.");
         }
-    }
-
-    return (
-        <div>
-            {
-                openImage 
-                ? <OpenProfileImg imageUrl={imageUrl} showProfile={showProfile}/> 
-                : openFollowingFollowersList
-                ? <OpenFollowingFollowersList showProfile={showProfile}/>
-                : <Profile 
+    };
+    
+    const renderContent = () => {
+        if (openImage) return <OpenProfileImg imageUrl={imageUrl} showProfile={showProfile} />;
+        if (isFollowingListOpen) return <OpenFollowingFollowersList showProfile={showProfile} followingUsers={profileData.following} followersUsers={profileData.followers} />;
+        return <Profile 
                     imageUrl={imageUrl} 
                     selectedImage={selectedImage} 
-                    userUploads={userUploads} 
+                    userUploads={profileData.userUploads} 
                     userInfoState={userInfoState} 
-                    countFollowing={followingData.length} 
-                    countFollowers={followersData.length} 
+                    countFollowing={profileData.following.length} 
+                    countFollowers={profileData.followers.length} 
                     showFollowingFollowersList={showFollowingFollowersList} 
-                  />
-            }
-        </div>
-    )
+                />;
+    };
+    
+    return <div>{renderContent()}</div>;
+    
 }
 
 const Profile = ({ selectedImage, userUploads, userInfoState, countFollowing, countFollowers, showFollowingFollowersList }) => {
@@ -119,8 +125,8 @@ const Profile = ({ selectedImage, userUploads, userInfoState, countFollowing, co
                             <div className="h-screen">
                                 <div className="relative grid grid-cols-3 sm:grid-cols-3 gap-4 text-white py-4 pr-10">
                                     {userUploads.map((arrayItems, index) => (
-                                        <div key={index} onClick={() => selectedImage(arrayItems.url)}>
-                                            <img src={arrayItems.url} alt="test" className="h-24 sm:h-48 w-full object-cover" />
+                                        <div key={index} onClick={() => selectedImage(arrayItems)}>
+                                            <img src={arrayItems} alt="test" className="h-24 sm:h-48 w-full object-cover" />
                                         </div>
                                     ))}
                                 </div>
@@ -142,7 +148,7 @@ const OpenProfileImg = ({ imageUrl, showProfile }) => {
     )
 }
 
-const OpenFollowingFollowersList = ( {showProfile} ) => {
+const OpenFollowingFollowersList = ( {showProfile, followingUsers, followersUsers} ) => {
     const [showFollowingList, setShowFollowingList] = useState(false);
     const [showFollowersList, setShowFollowersList] = useState(false);
 
@@ -156,46 +162,6 @@ const OpenFollowingFollowersList = ( {showProfile} ) => {
         setShowFollowersList(current => !current);
     }
 
-    const FollowingList = () => {
-        return (
-            <div class="w-full grid grid-cols-4 grid-rows-2 gap-6 p-4 items-center bg-zinc-800 rounded-lg shadow-md">
-                <div class="row-span-2">
-                    <img 
-                        src="https://via.placeholder.com/150" 
-                        alt="Profile" 
-                        class="h-24 w-24 rounded-full object-cover"
-                    />
-                </div>
-                <div class="col-span-2">
-                    <div class="text-white font-semibold">john_doe</div>
-                </div>
-                <div class="row-span-2 flex justify-end">
-                    <button class="px-4 py-2 bg-red-500 text-white rounded-md">Unfollow</button>
-                </div>
-                <div class="col-span-2">
-                    <div class="text-gray-400 text-sm">Loving life!</div>
-                </div>
-    
-                <div class="row-span-2">
-                    <img 
-                        src="https://via.placeholder.com/150" 
-                        alt="Profile" 
-                        class="h-24 w-24 rounded-full object-cover"
-                    />
-                </div>
-                <div class="col-span-2">
-                    <div class="text-white font-semibold">rick_owens</div>
-                </div>
-                <div class="row-span-2 flex justify-end">
-                    <button class="px-4 py-2 bg-red-500 text-white rounded-md">Unfollow</button>
-                </div>
-                <div class="col-span-2">
-                    <div class="text-gray-400 text-sm">Loving life!</div>
-                </div>
-            </div>
-        );
-    };
-
     return (
         <div className="h-screen pt-20 text-white text-xl bg-zinc-900 z-50">
             <a href="#"><img src="images/close_icon.svg" alt="closebtn" className="fixed right-5 h-4 w-auto" onClick={showProfile}/></a>
@@ -204,50 +170,72 @@ const OpenFollowingFollowersList = ( {showProfile} ) => {
                 <div className={showFollowersList && "border-b-2 w-24"} onClick={() => showAllFollowers()}>Followers</div>
             </div>
 
-            {showFollowingList && <FollowingList />}
-            {showFollowersList && <FollowersList />}
+            {showFollowingList && <FollowingList followingUsers={followingUsers} />}
+            {showFollowersList && <FollowersList followersUsers={followersUsers} />}
         </div>
     );
 };
 
-const FollowersList = () => {
+const FollowingList = ( { followingUsers }) => {
     return (
-        <div class="w-full grid grid-cols-4 grid-rows-2 gap-6 p-4 items-center bg-zinc-800 rounded-lg shadow-md">
-            <div class="row-span-2">
-                <img 
-                    src="https://via.placeholder.com/150" 
-                    alt="Profile" 
-                    class="h-24 w-24 rounded-full object-cover"
-                />
-            </div>
-            <div class="col-span-2">
-                <div class="text-white font-semibold">Fred_doe</div>
-            </div>
-            <div class="row-span-2 flex justify-end">
-                <button class="px-4 py-2 bg-red-500 text-white rounded-md">Remove</button>
-            </div>
-            <div class="col-span-2">
-                <div class="text-gray-400 text-sm">Working!</div>
-            </div>
-
-            <div class="row-span-2">
-                <img 
-                    src="https://via.placeholder.com/150" 
-                    alt="Profile" 
-                    class="h-24 w-24 rounded-full object-cover"
-                />
-            </div>
-            <div class="col-span-2">
-                <div class="text-white font-semibold">Grant_owens</div>
-            </div>
-            <div class="row-span-2 flex justify-end">
-                <button class="px-4 py-2 bg-red-500 text-white rounded-md">Remove</button>
-            </div>
-            <div class="col-span-2">
-                <div class="text-gray-400 text-sm">Entrepeneur!</div>
-            </div>
+        <div>
+            {
+                (followingUsers && followingUsers.map(arrayItems => {
+                    return(
+                    <div class="w-full grid grid-cols-4 grid-rows-2 gap-6 p-4 items-center bg-zinc-800 rounded-lg shadow-md">  
+                        <div class="row-span-2">
+                            <img 
+                                src="https://via.placeholder.com/150" 
+                                alt="Profile" 
+                                class="h-24 w-24 rounded-full object-cover"
+                            />
+                        </div>
+                        <div class="col-span-2">
+                            <div class="text-white font-semibold">{arrayItems}</div>
+                        </div>
+                        <div class="row-span-2 flex justify-end">
+                            <button class="px-4 py-2 bg-red-500 text-white rounded-md">Unfollow</button>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="text-gray-400 text-sm">Loving life!</div>
+                        </div>                    
+                    </div>
+                    )
+                }))
+            }
         </div>
     );
-}
+};
+
+const FollowersList = ( { followersUsers }) => {
+    return (
+        <div>
+            {
+                (followersUsers && followersUsers.map(arrayItems => {
+                    return(
+                    <div class="w-full grid grid-cols-4 grid-rows-2 gap-6 p-4 items-center bg-zinc-800 rounded-lg shadow-md">  
+                        <div class="row-span-2">
+                            <img 
+                                src="https://via.placeholder.com/150" 
+                                alt="Profile" 
+                                class="h-24 w-24 rounded-full object-cover"
+                            />
+                        </div>
+                        <div class="col-span-2">
+                            <div class="text-white font-semibold">{arrayItems}</div>
+                        </div>
+                        <div class="row-span-2 flex justify-end">
+                            <button class="px-4 py-2 bg-red-500 text-white rounded-md">Remove</button>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="text-gray-400 text-sm">Im a Follower!</div>
+                        </div>                    
+                    </div>
+                    )
+                }))
+            }
+        </div>
+    );
+};
 
 export default ProfileContainerPage;
