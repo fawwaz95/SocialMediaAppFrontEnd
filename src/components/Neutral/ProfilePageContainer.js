@@ -35,6 +35,7 @@ const ProfileContainerPage = () => {
         fetchAllData();
     }, []);
 
+
     const fetchUserUploads = async () => {
         const response = await fetch(`http://localhost:3001/routes/getAllUserUploads?email=${userInfoState.userInfo.email}`);
         const data = await response.json();
@@ -70,7 +71,7 @@ const ProfileContainerPage = () => {
     
     const renderContent = () => {
         if (openImage) return <OpenProfileImg imageUrl={imageUrl} showProfile={showProfile} />;
-        if (isFollowingListOpen) return <OpenFollowingFollowersList showProfile={showProfile} followingUsers={profileData.following} followersUsers={profileData.followers} />;
+        if (isFollowingListOpen) return <OpenFollowingFollowersList showProfile={showProfile} fetchFollowingFollowers={fetchFollowingFollowers} userName={userInfoState.userInfo.userName} followingUsers={profileData.following} followersUsers={profileData.followers} />;
         return <Profile 
                     imageUrl={imageUrl} 
                     selectedImage={selectedImage} 
@@ -148,7 +149,7 @@ const OpenProfileImg = ({ imageUrl, showProfile }) => {
     )
 }
 
-const OpenFollowingFollowersList = ( {showProfile, followingUsers, followersUsers} ) => {
+const OpenFollowingFollowersList = ( {showProfile, fetchFollowingFollowers, userName, followingUsers, followersUsers} ) => {
     const [showFollowingList, setShowFollowingList] = useState(false);
     const [showFollowersList, setShowFollowersList] = useState(false);
 
@@ -170,17 +171,17 @@ const OpenFollowingFollowersList = ( {showProfile, followingUsers, followersUser
                 <div className={showFollowersList && "border-b-2 w-24"} onClick={() => showAllFollowers()}>Followers</div>
             </div>
 
-            {showFollowingList && <FollowingList followingUsers={followingUsers} />}
-            {showFollowersList && <FollowersList followersUsers={followersUsers} />}
+            {showFollowingList && <FollowingList fetchFollowingFollowers={fetchFollowingFollowers} userName={userName} followingUsers={followingUsers} />}
+            {showFollowersList && <FollowersList userName={userName} followersUsers={followersUsers} />}
         </div>
     );
 };
 
-const FollowingList = ( { followingUsers }) => {
+const FollowingList = ( { fetchFollowingFollowers, userName, followingUsers }) => {
     return (
         <div>
             {
-                (followingUsers && followingUsers.map(arrayItems => {
+                (followingUsers && followingUsers.map(followingUsers => {
                     return(
                     <div class="w-full grid grid-cols-4 grid-rows-2 gap-6 p-4 items-center bg-zinc-800 rounded-lg shadow-md">  
                         <div class="row-span-2">
@@ -191,10 +192,10 @@ const FollowingList = ( { followingUsers }) => {
                             />
                         </div>
                         <div class="col-span-2">
-                            <div class="text-white font-semibold">{arrayItems}</div>
+                            <div class="text-white font-semibold">{followingUsers}</div>
                         </div>
                         <div class="row-span-2 flex justify-end">
-                            <button class="px-4 py-2 bg-red-500 text-white rounded-md">Unfollow</button>
+                            <button class="px-4 py-2 bg-red-500 text-white rounded-md" onClick={() => unFollowUser({fetchFollowingFollowers, userName, unfollowUserName: followingUsers})}>Unfollow</button>
                         </div>
                         <div class="col-span-2">
                             <div class="text-gray-400 text-sm">Loving life!</div>
@@ -206,6 +207,47 @@ const FollowingList = ( { followingUsers }) => {
         </div>
     );
 };
+
+const unFollowUser = async ({ fetchFollowingFollowers, userName, unfollowUserName }) => {
+    console.log("unFollowUser function called " + unfollowUserName);
+
+    try {
+        const response = await fetch(`http://localhost:3001/routes/unFollowUser?user_id=${userName}&friend_id=${unfollowUserName}`, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Error in unFollowUser function:", errorData.error);
+            alert("Can't unfollow user... please contact admin");
+            return;
+        }
+
+        const data = await response.json();
+        console.log("Unfollow user data returned...");
+        console.log(data);
+
+        if(data.success === true){
+            /*console.log("Removing user from hook......");
+            setProfileData(prev => ({
+                ...prev,
+                following: prev.following.filter(user => user !== unfollowUserName)
+            }));*/
+
+            await fetchFollowingFollowers; //change so on success re render the app and show the updated list
+        }
+
+
+    } catch (error) {
+        console.error("Error in unFollowUser function:", error);
+        alert("An error occurred while trying to unfollow the user.");
+    }
+};
+
+
 
 const FollowersList = ( { followersUsers }) => {
     return (
