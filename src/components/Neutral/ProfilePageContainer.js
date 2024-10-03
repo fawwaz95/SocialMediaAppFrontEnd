@@ -71,7 +71,7 @@ const ProfileContainerPage = () => {
     
     const renderContent = () => {
         if (openImage) return <OpenProfileImg imageUrl={imageUrl} showProfile={showProfile} />;
-        if (isFollowingListOpen) return <OpenFollowingFollowersList showProfile={showProfile} fetchFollowingFollowers={fetchFollowingFollowers} userName={userInfoState.userInfo.userName} followingUsers={profileData.following} followersUsers={profileData.followers} />;
+        if (isFollowingListOpen) return <OpenFollowingFollowersList showProfile={showProfile} setProfileData={setProfileData} userName={userInfoState.userInfo.userName} followingUsers={profileData.following} followersUsers={profileData.followers} />;
         return <Profile 
                     imageUrl={imageUrl} 
                     selectedImage={selectedImage} 
@@ -149,7 +149,7 @@ const OpenProfileImg = ({ imageUrl, showProfile }) => {
     )
 }
 
-const OpenFollowingFollowersList = ( {showProfile, fetchFollowingFollowers, userName, followingUsers, followersUsers} ) => {
+const OpenFollowingFollowersList = ( {showProfile, setProfileData, userName, followingUsers, followersUsers} ) => {
     const [showFollowingList, setShowFollowingList] = useState(false);
     const [showFollowersList, setShowFollowersList] = useState(false);
 
@@ -171,44 +171,92 @@ const OpenFollowingFollowersList = ( {showProfile, fetchFollowingFollowers, user
                 <div className={showFollowersList && "border-b-2 w-24"} onClick={() => showAllFollowers()}>Followers</div>
             </div>
 
-            {showFollowingList && <FollowingList fetchFollowingFollowers={fetchFollowingFollowers} userName={userName} followingUsers={followingUsers} />}
+            {showFollowingList && <FollowingList setProfileData={setProfileData} userName={userName} followingUsers={followingUsers} />}
             {showFollowersList && <FollowersList userName={userName} followersUsers={followersUsers} />}
         </div>
     );
 };
 
-const FollowingList = ( { fetchFollowingFollowers, userName, followingUsers }) => {
+const FollowingList = ({ setProfileData, userName, followingUsers }) => {
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [userToUnfollow, setUserToUnfollow] = useState(null);
+
+    const handleOpenModal = (user) => {
+        setUserToUnfollow(user);
+        setModalOpen(true);
+    };
+
     return (
         <div>
-            {
-                (followingUsers && followingUsers.map(followingUsers => {
-                    return(
-                    <div class="w-full grid grid-cols-4 grid-rows-2 gap-6 p-4 items-center bg-zinc-800 rounded-lg shadow-md">  
-                        <div class="row-span-2">
-                            <img 
-                                src="https://via.placeholder.com/150" 
-                                alt="Profile" 
-                                class="h-24 w-24 rounded-full object-cover"
-                            />
-                        </div>
-                        <div class="col-span-2">
-                            <div class="text-white font-semibold">{followingUsers}</div>
-                        </div>
-                        <div class="row-span-2 flex justify-end">
-                            <button class="px-4 py-2 bg-red-500 text-white rounded-md" onClick={() => unFollowUser({fetchFollowingFollowers, userName, unfollowUserName: followingUsers})}>Unfollow</button>
-                        </div>
-                        <div class="col-span-2">
-                            <div class="text-gray-400 text-sm">Loving life!</div>
-                        </div>                    
+            {followingUsers && followingUsers.map((user) => (
+                <div key={user} className="w-full grid grid-cols-4 grid-rows-2 gap-6 p-4 items-center bg-zinc-800 rounded-lg shadow-md">  
+                    <div className="row-span-2">
+                        <img 
+                            src="https://via.placeholder.com/150" 
+                            alt="Profile" 
+                            className="h-24 w-24 rounded-full object-cover"
+                        />
                     </div>
-                    )
-                }))
-            }
+                    <div className="col-span-2">
+                        <div className="text-white font-semibold">{user}</div>
+                    </div>
+                    <div className="row-span-2 flex justify-end">
+                        <button 
+                            className="px-4 py-2 bg-red-500 text-white rounded-md" 
+                            onClick={() => handleOpenModal(user)}
+                        >
+                            Unfollow
+                        </button>
+                    </div>
+
+                    {isModalOpen && (
+                        <ConfirmUnFollow
+                            userToUnfollow={userToUnfollow}
+                            setModalOpen={setModalOpen}
+                            setProfileData={setProfileData}
+                            userName={userName}
+                        />
+                    )}
+
+                    <div className="col-span-2">
+                        <div className="text-gray-400 text-sm">Loving life!</div>
+                    </div>                    
+                </div>
+            ))}
         </div>
     );
 };
 
-const unFollowUser = async ({ fetchFollowingFollowers, userName, unfollowUserName }) => {
+
+const ConfirmUnFollow = ({ userToUnfollow, setModalOpen, setProfileData, userName }) => {
+    const handleUnfollowConfirm = () => {
+        unFollowUser({ setProfileData, userName, unfollowUserName: userToUnfollow });
+        setModalOpen(false); 
+    };
+
+    const handleUnfollowCancel = () => {
+        setModalOpen(false);
+    };
+
+    return (
+        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+                <p className="text-lg mb-4 text-gray-800">Are you sure you want to unfollow {userToUnfollow}?</p>
+                <div className="flex justify-around">
+                    <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={handleUnfollowConfirm}>
+                        Yes
+                    </button>
+                    <button className="px-4 py-2 bg-red-500 text-white rounded-md" onClick={handleUnfollowCancel}>
+                        No
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+
+const unFollowUser = async ({ setProfileData, userName, unfollowUserName }) => {
     console.log("unFollowUser function called " + unfollowUserName);
 
     try {
@@ -231,13 +279,11 @@ const unFollowUser = async ({ fetchFollowingFollowers, userName, unfollowUserNam
         console.log(data);
 
         if(data.success === true){
-            /*console.log("Removing user from hook......");
+            console.log(`Removing ${data.unFollowed} from hook......`);
             setProfileData(prev => ({
                 ...prev,
-                following: prev.following.filter(user => user !== unfollowUserName)
-            }));*/
-
-            await fetchFollowingFollowers; //change so on success re render the app and show the updated list
+                following: prev.following.filter(user => user !== data.unFollowed)
+            }));
         }
 
 
@@ -245,6 +291,7 @@ const unFollowUser = async ({ fetchFollowingFollowers, userName, unfollowUserNam
         console.error("Error in unFollowUser function:", error);
         alert("An error occurred while trying to unfollow the user.");
     }
+
 };
 
 
