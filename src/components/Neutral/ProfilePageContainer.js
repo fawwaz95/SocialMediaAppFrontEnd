@@ -105,7 +105,7 @@ const Profile = ({ selectedImage, userUploads, userInfoState, countFollowing, co
                             Following
                             <div>{countFollowing}</div>
                         </div>
-                        <div>
+                        <div onClick={showFollowingFollowersList}>
                             Followers
                             <div>{countFollowers}</div>
                         </div>
@@ -218,6 +218,7 @@ const FollowingList = ({ setProfileData, userName, followingUsers }) => {
                         />
                     )}
 
+
                     <div className="col-span-2">
                         <div className="text-gray-400 text-sm">Loving life!</div>
                     </div>                    
@@ -228,9 +229,9 @@ const FollowingList = ({ setProfileData, userName, followingUsers }) => {
 };
 
 
-const ConfirmUnFollow = ({ userToUnfollow, setModalOpen, setProfileData, userName }) => {
+const ConfirmUnFollow = ({ userToUnfollow, setModalOpen, setProfileData, userName} ) => {
     const handleUnfollowConfirm = () => {
-        unFollowUser({ setProfileData, userName, unfollowUserName: userToUnfollow });
+        unFollowUser(setProfileData, userName, userToUnfollow);
         setModalOpen(false); 
     };
 
@@ -255,12 +256,11 @@ const ConfirmUnFollow = ({ userToUnfollow, setModalOpen, setProfileData, userNam
     );
 };
 
-
-const unFollowUser = async ({ setProfileData, userName, unfollowUserName }) => {
-    console.log("unFollowUser function called " + unfollowUserName);
+const unFollowUser = async (setProfileData, userName, userToUnfollow) => {
+    console.log("unFollowUser function called " + userToUnfollow);
 
     try {
-        const response = await fetch(`http://localhost:3001/routes/unFollowUser?user_id=${userName}&friend_id=${unfollowUserName}`, {
+        const response = await fetch(`http://localhost:3001/routes/unFollowUser?user_id=${userName}&friend_id=${userToUnfollow}`, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json'
@@ -294,37 +294,90 @@ const unFollowUser = async ({ setProfileData, userName, unfollowUserName }) => {
 
 };
 
+const FollowersList = ( { userName, followersUsers }) => {
+    const [confirmWindow, showConfirmWindow] = useState(false);
+    const [userToRemove, setUserToRemove] = useState(null);
 
-
-const FollowersList = ( { followersUsers }) => {
+    const setRemoveUser = (userToRemove) =>{
+        console.log("setRemoveUser invoked....");
+        setUserToRemove(userToRemove);
+        showConfirmWindow(current => !current);
+    }
     return (
         <div>
-            {
-                (followersUsers && followersUsers.map(arrayItems => {
-                    return(
-                    <div class="w-full grid grid-cols-4 grid-rows-2 gap-6 p-4 items-center bg-zinc-800 rounded-lg shadow-md">  
-                        <div class="row-span-2">
-                            <img 
-                                src="https://via.placeholder.com/150" 
-                                alt="Profile" 
-                                class="h-24 w-24 rounded-full object-cover"
-                            />
-                        </div>
-                        <div class="col-span-2">
-                            <div class="text-white font-semibold">{arrayItems}</div>
-                        </div>
-                        <div class="row-span-2 flex justify-end">
-                            <button class="px-4 py-2 bg-red-500 text-white rounded-md">Remove</button>
-                        </div>
-                        <div class="col-span-2">
-                            <div class="text-gray-400 text-sm">Im a Follower!</div>
-                        </div>                    
+            {followersUsers && followersUsers.map((follower) => (
+                <div key={follower} className="w-full grid grid-cols-4 grid-rows-2 gap-6 p-4 items-center bg-zinc-800 rounded-lg shadow-md">  
+                    <div className="row-span-2">
+                        <img 
+                            src="https://via.placeholder.com/150" 
+                            alt="Profile" 
+                            className="h-24 w-24 rounded-full object-cover"
+                        />
                     </div>
-                    )
-                }))
-            }
+                    <div className="col-span-2">
+                        <div className="text-white font-semibold">{follower}</div>
+                    </div>
+                    <div className="row-span-2 flex justify-end">
+                        <button className="px-4 py-2 bg-red-500 text-white rounded-md" onClick={() => setRemoveUser(follower)}>
+                            Remove
+                        </button>
+                    </div>
+                    <div className="col-span-2">
+                        <div className="text-gray-400 text-sm">I'm a Follower!</div>
+                    </div>                    
+                </div>
+            ))}
+
+            {confirmWindow && (
+                <RemoveFollower 
+                    userName={userName} 
+                    userToRemove={userToRemove}
+                />
+            )}
         </div>
     );
 };
+
+const RemoveFollower = async ({userName, userToRemove}) => {
+    console.log("removeFollower invoked....");
+    console.log(userName + " : " + userToRemove);
+
+    return (
+        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+                <p className="text-lg mb-4 text-gray-800">Are you sure you want to unfollow {userToRemove}?</p>
+                <div className="flex justify-around">
+                    <button className="px-4 py-2 bg-green-500 text-white rounded-md">
+                        Yes
+                    </button>
+                    <button className="px-4 py-2 bg-red-500 text-white rounded-md">
+                        No
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+    /*try{
+        const response = await fetch(`http://localhost:3001/routes/removeFollower?user_id=${userName}&friend_id=${userNameToRemove}`, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if(!response.ok){
+            throw new Error("Unable to fetch remove follower....." + "Response: " + response.ok);
+        }
+
+        const data = response.json();
+        console.log(data);
+    }catch(error){
+        console.error(error);
+        console.log("Error fetching removeFollower....");
+    }*/
+
+
+
+}
 
 export default ProfileContainerPage;

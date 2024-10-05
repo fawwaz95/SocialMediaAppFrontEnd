@@ -7,11 +7,16 @@ import NewsfeedPage from '../Mobile/NewsfeedPage';
 const NewsfeedWidget = () => {
     const isMobile = useIsMobile();
     const [newsfeed, setNewsfeed] = useState([]);
+    const [followingUsers, setFollowingUsers] = useState([]);
     const userInfoState = useSelector((state) => state.userInfo);
 
     useEffect(() => {
-        console.log("Newsfeed.......useEffect......");
-        getNewsfeed();
+        const fetchAllData = async () => {
+            await getNewsfeed();
+            await getFollowing();
+        };
+        
+        fetchAllData();
     },[userInfoState]);
 
     const getNewsfeed = async () => {
@@ -23,13 +28,22 @@ const NewsfeedWidget = () => {
         setNewsfeed(data);
     }
 
+    const getFollowing = async () => {
+        const response = await fetch(`http://localhost:3001/routes/getFollowingFollowers?user_id=${userInfoState.userInfo.userName}`);
+            
+        if (!response.ok) throw new Error("Failed to fetch following/followers in newsfeed......");
+        
+        const data = await response.json();
+
+        console.log("FOUND ALL FOLLOWING USERS....");
+        console.log(data);
+
+        setFollowingUsers(data.followingFollowersData.following);
+    }
+
     const followFriend = async (event, item) => {
         event.preventDefault();
-        console.log("Clicked follow button");
-        console.log("Need to create a new route, that will save the username into a friends table?");
-        console.log(userInfoState.userInfo.userName);
-        console.log("item");
-        console.log(item);
+        console.log("followFriend func invoked....");
 
         const postMethod = {
             method: 'POST',
@@ -70,7 +84,7 @@ const NewsfeedWidget = () => {
                                     <div>{item.userName}</div>
                                     <div className="text-slate-400">{item.location}</div>
                                 </div>
-                                <div onClick={(e)=> followFriend(e, item)} className="flex m-auto justify-between p-2 bg-slate-700 rounded-full mr-4">
+                                <div onClick={(e)=> followFriend(e, item)} className={followingUsers.includes(item.userName) ? "flex m-auto justify-between p-2 bg-green-400 rounded-full mr-4" : "flex m-auto justify-between p-2 bg-slate-700 rounded-full mr-4"}>
                                     <a href="#">
                                         <img src="images/following_icon.svg" className="h-5" alt="Follow" />
                                     </a>
