@@ -56,16 +56,25 @@ const ProfileContainerPage = () => {
             if (!response.ok) throw new Error("Failed to fetch following/followers");
             
             const data = await response.json();
-            
-            setProfileData(prev => ({
-                ...prev,
-                following: data.followingFollowersData.following,
-                followers: data.followingFollowersData.followers
-            }));
+
+            if(data.success === false){
+                setProfileData(prev => ({
+                    ...prev,
+                    following: [],
+                    followers: []
+                }));
+            }else{
+                setProfileData(prev => ({
+                    ...prev,
+                    following: data.followingFollowersData.following,
+                    followers: data.followingFollowersData.followers
+                }));
+            }
+        
 
         } catch (error) {
             console.error(error);
-            alert("There was an error fetching following/followers data.");
+            console.log("Current user doesnt have any following/follower users");
         }
     };
     
@@ -172,7 +181,7 @@ const OpenFollowingFollowersList = ( {showProfile, setProfileData, userName, fol
             </div>
 
             {showFollowingList && <FollowingList setProfileData={setProfileData} userName={userName} followingUsers={followingUsers} />}
-            {showFollowersList && <FollowersList userName={userName} followersUsers={followersUsers} />}
+            {showFollowersList && <FollowersList userName={userName} followersUsers={followersUsers} setProfileData={setProfileData}/>}
         </div>
     );
 };
@@ -294,14 +303,14 @@ const unFollowUser = async (setProfileData, userName, userToUnfollow) => {
 
 };
 
-const FollowersList = ( { userName, followersUsers }) => {
+const FollowersList = ( { userName, followersUsers, setProfileData }) => {
     const [confirmWindow, showConfirmWindow] = useState(false);
     const [userToRemove, setUserToRemove] = useState(null);
 
-    const setRemoveUser = (userToRemove) =>{
+    const setRemoveUser = (user) =>{
         console.log("setRemoveUser invoked....");
-        setUserToRemove(userToRemove);
-        showConfirmWindow(current => !current);
+        setUserToRemove(user);
+        showConfirmWindow(true);
     }
     return (
         <div>
@@ -332,25 +341,67 @@ const FollowersList = ( { userName, followersUsers }) => {
                 <RemoveFollower 
                     userName={userName} 
                     userToRemove={userToRemove}
+                    showConfirmWindow={showConfirmWindow}
+                    setProfileData={setProfileData}
                 />
             )}
         </div>
     );
 };
 
-const RemoveFollower = async ({userName, userToRemove}) => {
+const RemoveFollower = ({userName, userToRemove, showConfirmWindow, setProfileData}) => {
     console.log("removeFollower invoked....");
     console.log(userName + " : " + userToRemove);
+
+    const handleYesBtn = (userName, userToRemove) => {
+        console.log("handleYesBtn invoked....");
+        showConfirmWindow(false);
+        removeTheFollower(userName, userToRemove, setProfileData);
+    }
+
+    const handleCanceBtn = () => {
+        console.log("handleCanceBtn invoked....");
+        showConfirmWindow(false);
+    }
+
+    const removeTheFollower = async  ( userName, userToRemove, setProfileData ) => {
+
+        console.log("removeTheFollower invoked....");
+        try{
+        const response = await fetch(`http://localhost:3001/routes/removeFollower?user_id=${userName}&friend_id=${userToRemove}`, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if(!response.ok){
+            throw new Error("Unable to fetch remove follower....." + "Response: " + response.ok);
+        }
+
+        const data = await response.json();
+        console.log(data);
+
+        setProfileData(prev => ({
+            ...prev,
+            followers: prev.followers.filter(user => user != userToRemove),
+        }));
+
+        }catch(error){
+            console.error(error);
+            console.log("Error in removeTheFollower....");
+        }
+    }
 
     return (
         <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
             <div className="bg-white p-8 rounded-lg shadow-lg text-center">
                 <p className="text-lg mb-4 text-gray-800">Are you sure you want to unfollow {userToRemove}?</p>
                 <div className="flex justify-around">
-                    <button className="px-4 py-2 bg-green-500 text-white rounded-md">
+                    <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={()=> handleYesBtn(userName, userToRemove)}>
                         Yes
                     </button>
-                    <button className="px-4 py-2 bg-red-500 text-white rounded-md">
+                    <button className="px-4 py-2 bg-red-500 text-white rounded-md" onClick={()=> handleCanceBtn()}>
                         No
                     </button>
                 </div>

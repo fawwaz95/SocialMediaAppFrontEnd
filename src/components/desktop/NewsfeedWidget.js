@@ -38,7 +38,12 @@ const NewsfeedWidget = () => {
         console.log("FOUND ALL FOLLOWING USERS....");
         console.log(data);
 
-        setFollowingUsers(data.followingFollowersData.following);
+        if (data.success === false) {
+            console.log("User isnt following anyone.....");
+            setFollowingUsers([]);
+        }else{
+            setFollowingUsers(data.followingFollowersData.following);
+        }
     }
 
     const followFriend = async (event, item) => {
