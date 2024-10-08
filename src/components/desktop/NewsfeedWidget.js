@@ -3,11 +3,14 @@ import { useIsMobile } from '../../contexts/MobileContext';
 import { useSelector } from 'react-redux';
 
 import NewsfeedPage from '../Mobile/NewsfeedPage';
+import ConfirmBox from '../WindowPopups/ConfirmBox';
 
 const NewsfeedWidget = () => {
     const isMobile = useIsMobile();
     const [newsfeed, setNewsfeed] = useState([]);
     const [followingUsers, setFollowingUsers] = useState([]);
+    const [confirmWindow, showConfirmWindow] = useState(false);
+    const [userToUnfollow, setUserToUnfollow] = useState("");
     const userInfoState = useSelector((state) => state.userInfo);
 
     useEffect(() => {
@@ -74,6 +77,32 @@ const NewsfeedWidget = () => {
         console.log(result);
     }
 
+    const unFollowFriend = async (userToUnfollow) => {
+        console.log("unFollowFriend func invoked....");
+        console.log(userToUnfollow);
+        setUserToUnfollow(userToUnfollow)
+        showConfirmWindow(true);
+        /*try{
+            const response = await fetch(`http://localhost:3001/routes/removeFollower?user_id=${userInfoState.userInfo.userName}&friend_id=${userToRemove}`, {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            if(!response.ok){
+                throw new Error("Unable to fetch remove follower....." + "Response: " + response.ok);
+            }
+    
+            const data = await response.json();
+            console.log(data);
+    
+            }catch(error){
+                console.error(error);
+                console.log("Error in unFollowFriend....");
+            }*/
+    }
+
 
     return (
         <div>
@@ -89,7 +118,7 @@ const NewsfeedWidget = () => {
                                     <div>{item.userName}</div>
                                     <div className="text-slate-400">{item.location}</div>
                                 </div>
-                                <div onClick={(e)=> followFriend(e, item)} className={followingUsers.includes(item.userName) ? "flex m-auto justify-between p-2 bg-green-400 rounded-full mr-4" : "flex m-auto justify-between p-2 bg-slate-700 rounded-full mr-4"}>
+                                <div onClick={(e)=> followingUsers.includes(item.userName) ? unFollowFriend(item.userName) : followFriend(e, item)} className={followingUsers.includes(item.userName) ? "flex m-auto justify-between p-2 bg-green-400 rounded-full mr-4" : "flex m-auto justify-between p-2 bg-slate-700 rounded-full mr-4"}>
                                     <a href="#">
                                         <img src="images/following_icon.svg" className="h-5" alt="Follow" />
                                     </a>
@@ -111,73 +140,13 @@ const NewsfeedWidget = () => {
                             </div>
                         </div>
                     ))}
-
-                    {/*<div id="content" className="flex-col p-4 bg-zinc-900 rounded-md">
-                        <div id="contentHeader" className="flex items-center">
-                            <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
-                            <div className="flex-1 pl-4">
-                                <div> Immanuel Quickley </div>
-                                <div className="text-slate-400"> Toronto, ON</div>
-                            </div>
-                            <div className="flex m-auto justify-between p-2 bg-slate-700 rounded-full">
-                                <a href="#" ><img src="images/following_icon.svg" className="h-5" /></a>
-                            </div>
-                        </div>
-                        <div id="contentBody">
-                            <div className="flex flex-col items-start">
-                                <div className="py-4"> Caption </div>
-                                <img src={ newsfeed && newsfeed[0].url} className="pt-4 pb-4" />
-                            </div>
-                            <div className="flex">
-                                <div className="pr-4"> <img src="/images/heart_icon.svg" className="h-4"></img> </div>
-                                <div> <img src="/images/comment_icon.svg" className="h-4"></img> </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="content" className="flex-col p-4 mt-4 bg-zinc-900 rounded-md">
-                        <div id="contentHeader" className="flex items-center">
-                            <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
-                            <div className="flex-1 pl-4">
-                                <div> Kevin Hart </div>
-                                <div className="text-slate-400"> Philadelphia, PEN</div>
-                            </div>
-                            <div className="flex m-auto justify-between p-2 bg-slate-700 rounded-full">
-                                <a href="#" ><img src="images/following_icon.svg" className="h-6" /></a>
-                            </div>
-                        </div>
-                        <div id="contentBody">
-                            <div className="flex flex-col items-start">
-                                <div className="py-4"> Caption </div>
-                                <img src="/images/coolHouse.webp" className="pt-4 pb-4" />
-                            </div>
-                            <div className="flex">
-                                <div className="pr-4"> <img src="/images/heart_icon.svg" className="h-4"></img> </div>
-                                <div> <img src="/images/comment_icon.svg" className="h-4"></img> </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="content" className="flex-col p-4 mt-4 bg-zinc-900 rounded-md">
-                        <div id="contentHeader" className="flex items-center">
-                            <div> <img src="/images/profile_image.jpg" className="rounded-full h-20 w-20 mr-4" /> </div>
-                            <div className="flex-1 pl-4">
-                                <div> John Doe </div>
-                                <div className="text-slate-400"> San Fransico, CA</div>
-                            </div>
-                            <div className="flex m-auto justify-between p-2 bg-slate-700 rounded-full">
-                                <a href="#" ><img src="images/following_icon.svg" className="h-5" /></a>
-                            </div>
-                        </div>
-                        <div id="contentBody">
-                            <div className="flex flex-col items-start">
-                                <div className="py-4"> Caption </div>
-                                <img src="/images/coolHouse.webp" className="pt-4 pb-4" />
-                            </div>
-                            <div className="flex">
-                                <div className="pr-4"> <img src="/images/heart_icon.svg" className="h-4"></img> </div>
-                                <div> <img src="/images/comment_icon.svg" className="h-4"></img> </div>
-                            </div>
-                        </div>
-                     </div>*/}
+                    {confirmWindow &&                      
+                        <ConfirmBox
+                            userToUnfollow={userToUnfollow}
+                            showConfirmWindow={showConfirmWindow}
+                            //setProfileData={setProfileData}
+                            userName={userInfoState.userInfo.userName}
+                        />}
                 </div>
 
             ) : (
