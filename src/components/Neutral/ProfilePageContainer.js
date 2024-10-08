@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import ConfirmBox from '../WindowPopups/ConfirmBox';
 
 const ProfileContainerPage = () => {
     const [openImage, setOpenImage] = useState(false);
@@ -187,12 +188,12 @@ const OpenFollowingFollowersList = ( {showProfile, setProfileData, userName, fol
 };
 
 const FollowingList = ({ setProfileData, userName, followingUsers }) => {
-    const [isModalOpen, setModalOpen] = useState(false);
+    const [confirmWindow, showConfirmWindow] = useState(false);
     const [userToUnfollow, setUserToUnfollow] = useState(null);
 
-    const handleOpenModal = (user) => {
+    const handleUnFollowUser = (user) => {
         setUserToUnfollow(user);
-        setModalOpen(true);
+        showConfirmWindow(true);
     };
 
     return (
@@ -212,21 +213,20 @@ const FollowingList = ({ setProfileData, userName, followingUsers }) => {
                     <div className="row-span-2 flex justify-end">
                         <button 
                             className="px-4 py-2 bg-red-500 text-white rounded-md" 
-                            onClick={() => handleOpenModal(user)}
+                            onClick={() => handleUnFollowUser(user)}
                         >
                             Unfollow
                         </button>
                     </div>
 
-                    {isModalOpen && (
-                        <ConfirmUnFollow
+                    {confirmWindow && (
+                        <ConfirmBox
                             userToUnfollow={userToUnfollow}
-                            setModalOpen={setModalOpen}
+                            showConfirmWindow={showConfirmWindow}
                             setProfileData={setProfileData}
                             userName={userName}
                         />
                     )}
-
 
                     <div className="col-span-2">
                         <div className="text-gray-400 text-sm">Loving life!</div>
@@ -237,71 +237,6 @@ const FollowingList = ({ setProfileData, userName, followingUsers }) => {
     );
 };
 
-
-const ConfirmUnFollow = ({ userToUnfollow, setModalOpen, setProfileData, userName} ) => {
-    const handleUnfollowConfirm = () => {
-        unFollowUser(setProfileData, userName, userToUnfollow);
-        setModalOpen(false); 
-    };
-
-    const handleUnfollowCancel = () => {
-        setModalOpen(false);
-    };
-
-    return (
-        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-8 rounded-lg shadow-lg text-center">
-                <p className="text-lg mb-4 text-gray-800">Are you sure you want to unfollow {userToUnfollow}?</p>
-                <div className="flex justify-around">
-                    <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={handleUnfollowConfirm}>
-                        Yes
-                    </button>
-                    <button className="px-4 py-2 bg-red-500 text-white rounded-md" onClick={handleUnfollowCancel}>
-                        No
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-const unFollowUser = async (setProfileData, userName, userToUnfollow) => {
-    console.log("unFollowUser function called " + userToUnfollow);
-
-    try {
-        const response = await fetch(`http://localhost:3001/routes/unFollowUser?user_id=${userName}&friend_id=${userToUnfollow}`, {
-            method: "DELETE",
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error("Error in unFollowUser function:", errorData.error);
-            alert("Can't unfollow user... please contact admin");
-            return;
-        }
-
-        const data = await response.json();
-        console.log("Unfollow user data returned...");
-        console.log(data);
-
-        if(data.success === true){
-            console.log(`Removing ${data.unFollowed} from hook......`);
-            setProfileData(prev => ({
-                ...prev,
-                following: prev.following.filter(user => user !== data.unFollowed)
-            }));
-        }
-
-
-    } catch (error) {
-        console.error("Error in unFollowUser function:", error);
-        alert("An error occurred while trying to unfollow the user.");
-    }
-
-};
 
 const FollowersList = ( { userName, followersUsers, setProfileData }) => {
     const [confirmWindow, showConfirmWindow] = useState(false);
@@ -338,97 +273,15 @@ const FollowersList = ( { userName, followersUsers, setProfileData }) => {
             ))}
 
             {confirmWindow && (
-                <RemoveFollower 
-                    userName={userName} 
-                    userToRemove={userToRemove}
-                    showConfirmWindow={showConfirmWindow}
-                    setProfileData={setProfileData}
-                />
+                         <ConfirmBox
+                         userToRemove={userToRemove}                         
+                         showConfirmWindow={showConfirmWindow}
+                         setProfileData={setProfileData}
+                         userName={userName}
+                         />
             )}
         </div>
     );
 };
-
-const RemoveFollower = ({userName, userToRemove, showConfirmWindow, setProfileData}) => {
-    console.log("removeFollower invoked....");
-    console.log(userName + " : " + userToRemove);
-
-    const handleYesBtn = (userName, userToRemove) => {
-        console.log("handleYesBtn invoked....");
-        showConfirmWindow(false);
-        removeTheFollower(userName, userToRemove, setProfileData);
-    }
-
-    const handleCanceBtn = () => {
-        console.log("handleCanceBtn invoked....");
-        showConfirmWindow(false);
-    }
-
-    const removeTheFollower = async  ( userName, userToRemove, setProfileData ) => {
-
-        console.log("removeTheFollower invoked....");
-        try{
-        const response = await fetch(`http://localhost:3001/routes/removeFollower?user_id=${userName}&friend_id=${userToRemove}`, {
-            method: "DELETE",
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if(!response.ok){
-            throw new Error("Unable to fetch remove follower....." + "Response: " + response.ok);
-        }
-
-        const data = await response.json();
-        console.log(data);
-
-        setProfileData(prev => ({
-            ...prev,
-            followers: prev.followers.filter(user => user != userToRemove),
-        }));
-
-        }catch(error){
-            console.error(error);
-            console.log("Error in removeTheFollower....");
-        }
-    }
-
-    return (
-        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-8 rounded-lg shadow-lg text-center">
-                <p className="text-lg mb-4 text-gray-800">Are you sure you want to unfollow {userToRemove}?</p>
-                <div className="flex justify-around">
-                    <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={()=> handleYesBtn(userName, userToRemove)}>
-                        Yes
-                    </button>
-                    <button className="px-4 py-2 bg-red-500 text-white rounded-md" onClick={()=> handleCanceBtn()}>
-                        No
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-    /*try{
-        const response = await fetch(`http://localhost:3001/routes/removeFollower?user_id=${userName}&friend_id=${userNameToRemove}`, {
-            method: "DELETE",
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if(!response.ok){
-            throw new Error("Unable to fetch remove follower....." + "Response: " + response.ok);
-        }
-
-        const data = response.json();
-        console.log(data);
-    }catch(error){
-        console.error(error);
-        console.log("Error fetching removeFollower....");
-    }*/
-
-
-
-}
 
 export default ProfileContainerPage;
