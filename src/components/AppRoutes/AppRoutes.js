@@ -19,6 +19,7 @@ const AppRoutes = () => {
             <Route path="/Login" element={<LoginPage />} />
             <Route path="/Register" element={<RegisterPage />} />
             <Route path="/Profile" element={<ProfilePageContainer />} />
+            <Route path="/Profile/:userName/:isUserProfileClicked"  element={<ProfilePageContainer />} />
             <Route path="/EditProfile" element={<EditProfilePage />} />
             <Route path="/Newsfeed" element={<NewsfeedWidget />} />
             <Route path="/NewsfeedMobile" element={<NewsfeedPage />} />

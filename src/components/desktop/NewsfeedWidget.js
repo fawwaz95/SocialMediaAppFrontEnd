@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext, useRef } from 'react';
 import { useIsMobile } from '../../contexts/MobileContext';
 import { useSelector } from 'react-redux';
+import {Link} from 'react-router-dom';
 
 import NewsfeedPage from '../Mobile/NewsfeedPage';
 import ConfirmBox from '../WindowPopups/ConfirmBox';
@@ -111,9 +112,11 @@ const NewsfeedWidget = () => {
                     {newsfeed && newsfeed.length > 0 && newsfeed.map((item) => (
                         <div className='bg-zinc-900 rounded-md'>
                             <div id="contentHeader" className="flex items-center pt-4">
-                                <div>
-                                    <img src="/images/profile_image.jpg" className="rounded-full h-12 w-12 md:h-20 md:w-20 mr-4 ml-4" alt="Profile" />
-                                </div>
+                                <Link to={`/Profile/${item.userName}/${true}`}>
+                                    <div>
+                                        <img src="/images/profile_image.jpg" className="rounded-full h-12 w-12 md:h-20 md:w-20 mr-4 ml-4" alt="Profile" />
+                                    </div>
+                                </Link>
                                 <div className="flex-1 pl-4">
                                     <div>{item.userName}</div>
                                     <div className="text-slate-400">{item.location}</div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import ConfirmBox from '../WindowPopups/ConfirmBox';
 
 const ProfileContainerPage = () => {
@@ -12,6 +13,7 @@ const ProfileContainerPage = () => {
     });
     const [isFollowingListOpen, setOpenFollowingFollowersList] = useState(false);
     const userInfoState = useSelector((state) => state.userInfo);
+    const { userName, isUserProfileClicked } = useParams();
 
     const selectedImage = (url) => {
         setImageUrl(url);
@@ -32,9 +34,15 @@ const ProfileContainerPage = () => {
             await fetchUserUploads();
             await fetchFollowingFollowers();
         };
+
+        if(isUserProfileClicked){
+            console.log("Clicked newsfeed user....." + userName);
+        }else{
+            console.log("Hello current profile user....." + userInfoState.userInfo.userName);
+        }
         
         fetchAllData();
-    }, []);
+    }, [userName, isUserProfileClicked]);
 
 
     const fetchUserUploads = async () => {
