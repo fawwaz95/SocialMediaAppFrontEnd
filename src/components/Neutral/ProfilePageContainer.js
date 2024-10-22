@@ -36,7 +36,7 @@ const ProfileContainerPage = () => {
         };
 
         if(isUserProfileClicked){
-            console.log("Clicked newsfeed user....." + userName);
+            console.log("Clicked newsfeed user......" + userName);
         }else{
             console.log("Hello current profile user....." + userInfoState.userInfo.userName);
         }
