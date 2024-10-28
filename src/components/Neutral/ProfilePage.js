@@ -41,6 +41,7 @@ const Profile = () => {
         console.log("USER PROFILE");
         console.log(data);
         setUserUploads(data);
+
     }
 
     const selectedImage = (url) => {

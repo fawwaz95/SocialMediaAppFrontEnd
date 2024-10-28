@@ -33,6 +33,7 @@ const ProfileContainerPage = () => {
         const fetchAllData = async () => {
             await fetchUserUploads();
             await fetchFollowingFollowers();
+            await fetchProfileInfo();
         };
 
         if(isUserProfileClicked){
@@ -86,11 +87,26 @@ const ProfileContainerPage = () => {
             console.log("Current user doesnt have any following/follower users");
         }
     };
+
+    const fetchProfileInfo = async () => {
+        console.log("fetchProfileInfo func............");
+
+        const userNameToSearch = userName ? userName : userInfoState.userInfo.userName;
+        console.log("Search.ing......" + userNameToSearch);
+        const response = await fetch(`http://localhost:3001/routes/getProfileInfo?userName=${userNameToSearch}`);
+        const data = await response.json();
+
+        console.log("GET PROFILE INFO DATA ");
+        console.log(data);
+       // setUserUploads(data);
+    }
     
     const renderContent = () => {
         if (openImage) return <OpenProfileImg imageUrl={imageUrl} showProfile={showProfile} />;
         if (isFollowingListOpen) return <OpenFollowingFollowersList showProfile={showProfile} setProfileData={setProfileData} userName={userInfoState.userInfo.userName} followingUsers={profileData.following} followersUsers={profileData.followers} />;
         return <Profile 
+                    isUserProfileClicked={isUserProfileClicked}
+                    userName={userName}
                     imageUrl={imageUrl} 
                     selectedImage={selectedImage} 
                     userUploads={profileData.userUploads} 
@@ -105,7 +121,7 @@ const ProfileContainerPage = () => {
     
 }
 
-const Profile = ({ selectedImage, userUploads, userInfoState, countFollowing, countFollowers, showFollowingFollowersList }) => {
+const Profile = ({ isUserProfileClicked, userName, selectedImage, userUploads, userInfoState, countFollowing, countFollowers, showFollowingFollowersList }) => {
     return (
         <div className="pl-10 overflow-y-auto">
             {!userInfoState ? (
@@ -129,7 +145,7 @@ const Profile = ({ selectedImage, userUploads, userInfoState, countFollowing, co
                         </div>
                     </div>
                     <div className="text-white text-center w-40 font-bold">
-                        {userInfoState.userInfo.firstName + " " + userInfoState.userInfo.lastName}
+                        {isUserProfileClicked ? userName: userInfoState.userInfo.userName}
                     </div>
                     <div className="text-white text-center w-40">{userInfoState.userInfo.bio}</div>
                     <div className="h-screen">

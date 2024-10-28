@@ -72,6 +72,8 @@ const EditProfilePage = () => {
                 throw {success: data.success, message: data.message}
             }
 
+            console.log("Check the editProfileData....results");
+            console.log(data);
             dispatch(loginUser(data))
             navigate("/");
 
