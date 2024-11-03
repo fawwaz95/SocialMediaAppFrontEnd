@@ -9,7 +9,8 @@ const ProfileContainerPage = () => {
     const [profileData, setProfileData] = useState({
         userUploads: [],
         following: [],
-        followers: []
+        followers: [],
+        fullBio: [],
     });
     const [isFollowingListOpen, setOpenFollowingFollowersList] = useState(false);
     const userInfoState = useSelector((state) => state.userInfo);
@@ -30,24 +31,33 @@ const ProfileContainerPage = () => {
     }
 
     useEffect(() => {
-        const fetchAllData = async () => {
-            await fetchUserUploads();
-            await fetchFollowingFollowers();
+        const fetchData = async () => {
             await fetchProfileInfo();
+            await fetchFollowingFollowers();
         };
 
         if(isUserProfileClicked){
-            console.log("Clicked newsfeed user......" + userName);
+            console.log("Clicked newsfeed user......." + userName);
         }else{
             console.log("Hello current profile user....." + userInfoState.userInfo.userName);
         }
         
-        fetchAllData();
+        fetchData();
     }, [userName, isUserProfileClicked]);
+
+    useEffect(() => {
+        if (profileData.fullBio.length > 0) {
+            fetchUserUploads();
+        }
+    }, [profileData.fullBio]);
 
 
     const fetchUserUploads = async () => {
-        const response = await fetch(`http://localhost:3001/routes/getAllUserUploads?email=${userInfoState.userInfo.email}`);
+        const emailToSearch = profileData.fullBio[0].email;
+        console.log("Fetch using following email.......................................");
+        console.log(emailToSearch);
+
+        const response = await fetch(`http://localhost:3001/routes/getAllUserUploads?email=${emailToSearch}`);
         const data = await response.json();
     
         setProfileData(prev => ({
@@ -98,7 +108,21 @@ const ProfileContainerPage = () => {
 
         console.log("GET PROFILE INFO DATA ");
         console.log(data);
-       // setUserUploads(data);
+        
+       if(data.success === false){
+        console.log("fetchProfileInfo FAILED");
+        setProfileData(prev => ({
+            ...prev,
+            fullBio: [],
+        }));
+       }else{
+        console.log("fetchProfileInfo SUCCESS");
+        setProfileData(prev => ({
+            ...prev,
+            fullBio: [data],
+        }));
+       }
+       
     }
     
     const renderContent = () => {
@@ -110,6 +134,7 @@ const ProfileContainerPage = () => {
                     imageUrl={imageUrl} 
                     selectedImage={selectedImage} 
                     userUploads={profileData.userUploads} 
+                    fullBio={profileData.fullBio}
                     userInfoState={userInfoState} 
                     countFollowing={profileData.following.length} 
                     countFollowers={profileData.followers.length} 
@@ -121,7 +146,7 @@ const ProfileContainerPage = () => {
     
 }
 
-const Profile = ({ isUserProfileClicked, userName, selectedImage, userUploads, userInfoState, countFollowing, countFollowers, showFollowingFollowersList }) => {
+const Profile = ({ isUserProfileClicked, userName, selectedImage, userUploads, fullBio, userInfoState, countFollowing, countFollowers, showFollowingFollowersList }) => {
     return (
         <div className="pl-10 overflow-y-auto">
             {!userInfoState ? (
@@ -145,9 +170,9 @@ const Profile = ({ isUserProfileClicked, userName, selectedImage, userUploads, u
                         </div>
                     </div>
                     <div className="text-white text-center w-40 font-bold">
-                        {isUserProfileClicked ? userName: userInfoState.userInfo.userName}
+                        {isUserProfileClicked ? userName : userInfoState.userInfo.userName}
                     </div>
-                    <div className="text-white text-center w-40">{userInfoState.userInfo.bio}</div>
+                    <div className="text-white text-center w-40"> {(fullBio[0] && fullBio[0].bio) ? fullBio[0].bio : ""}</div>
                     <div className="h-screen">
                         {userUploads && userUploads.message ? (
                             <div className="flex flex-col align-center justify-center">
