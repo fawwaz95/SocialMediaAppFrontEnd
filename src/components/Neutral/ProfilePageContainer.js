@@ -71,7 +71,9 @@ const ProfileContainerPage = () => {
 
     const fetchFollowingFollowers = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/routes/getFollowingFollowers?user_id=${userInfoState.userInfo.userName}`);
+            const response = isUserProfileClicked && userName ? 
+                            await fetch(`http://localhost:3001/routes/getFollowingFollowers?user_id=${userName}`)
+                            : await fetch(`http://localhost:3001/routes/getFollowingFollowers?user_id=${userInfoState.userInfo.userName}`);
             
             if (!response.ok) throw new Error("Failed to fetch following/followers");
             

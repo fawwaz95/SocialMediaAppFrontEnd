@@ -12,6 +12,7 @@ const NewsfeedWidget = () => {
     const [followingUsers, setFollowingUsers] = useState([]);
     const [confirmWindow, showConfirmWindow] = useState(false);
     const [userToUnfollow, setUserToUnfollow] = useState("");
+    const [postInteractions, setPostInteractions] = useState([]);
     const userInfoState = useSelector((state) => state.userInfo);
 
     useEffect(() => {
@@ -19,9 +20,11 @@ const NewsfeedWidget = () => {
             await getNewsfeed();
             await getFollowing();
         };
-        
-        fetchAllData();
-    },[userInfoState]);
+    
+        if (userInfoState.userInfo.userName) {
+            fetchAllData();
+        }
+    }, [userInfoState.userInfo.userName]);
 
     const getNewsfeed = async () => {
         const results = await fetch(`http://localhost:3001/routes/getNewsfeed`);
@@ -104,6 +107,41 @@ const NewsfeedWidget = () => {
             }*/
     }
 
+    useEffect(() => {
+        console.log("Check the postInteractions");
+        console.log(postInteractions);
+        
+    },[postInteractions]);
+
+        const toggleLikePost = async (userName, url) => {
+            setPostInteractions(prev => {
+                const existingPost = prev.find(post => post.id === url && post.userId === userName);
+                console.log("Existing");
+                console.log(existingPost);
+                if (existingPost) {
+                    // If already liked, toggle to unlike
+                    return prev.map(post =>
+                        post.id === url && post.userId === userName
+                            ? { ...post, liked: !post.liked }
+                            : post
+                    );
+                } else {
+                    // If not liked, add a new entry
+                    return [
+                        ...prev,
+                        {
+                            id: url,
+                            userId: userName,
+                            userName: userInfoState.userInfo.userName,
+                            liked: true,
+                            comments: []
+                        }
+                    ];
+                }
+            });
+        };
+        
+
 
     return (
         <div>
@@ -133,7 +171,7 @@ const NewsfeedWidget = () => {
                                     <img src={item.url} className="pt-4 pb-4 max-h-96 max-w-full self-center" alt="Post" key={new Date()}/>
                                 </div>
                                 <div className="flex">
-                                    <div className="pl-4 pr-4 pb-4">
+                                    <div className="pl-4 pr-4 pb-4" onClick={() => toggleLikePost(item.userName, item.url)}>
                                         <img src="/images/heart_icon.svg" className="h-4" alt="Like" />
                                     </div>
                                     <div>
