@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom';
 
 import NewsfeedPage from '../Mobile/NewsfeedPage';
 import ConfirmBox from '../WindowPopups/ConfirmBox';
+import CommentBox from '../WindowPopups/CommentBox';
 
 const NewsfeedWidget = () => {
     const isMobile = useIsMobile();
@@ -13,6 +14,7 @@ const NewsfeedWidget = () => {
     const [confirmWindow, showConfirmWindow] = useState(false);
     const [userToUnfollow, setUserToUnfollow] = useState("");
     const [postInteractions, setPostInteractions] = useState([]);
+    const [commentWindow, openCommentWindow] = useState(false);
     const userInfoState = useSelector((state) => state.userInfo);
 
     useEffect(() => {
@@ -110,11 +112,13 @@ const NewsfeedWidget = () => {
     useEffect(() => {
         console.log("Check the postInteractions");
         console.log(postInteractions);
+
+        console.log("Are we back?");
         
     },[postInteractions]);
 
-        const toggleLikePost = async (userName, url) => {
-            setPostInteractions(prev => {
+    const toggleLikePost = async (userName, url) => {
+        setPostInteractions(prev => {
                 const existingPost = prev.find(post => post.id === url && post.userId === userName);
                 console.log("Existing");
                 console.log(existingPost);
@@ -137,9 +141,14 @@ const NewsfeedWidget = () => {
                             comments: []
                         }
                     ];
-                }
-            });
-        };
+            }
+        });
+    };
+
+    const commentOnPost = async () => {
+        console.log("commentOnPost invoked.... ");
+        openCommentWindow(current => !current);
+    }
         
 
 
@@ -175,7 +184,7 @@ const NewsfeedWidget = () => {
                                         <img src="/images/heart_icon.svg" className="h-4" alt="Like" />
                                     </div>
                                     <div>
-                                        <img src="/images/comment_icon.svg" className="h-4" alt="Comment" />
+                                        <img src="/images/comment_icon.svg" className="h-4" alt="Comment" onClick={() => commentOnPost()}/>
                                     </div>
                                 </div>
                             </div>
@@ -188,6 +197,10 @@ const NewsfeedWidget = () => {
                             //setProfileData={setProfileData}
                             userName={userInfoState.userInfo.userName}
                         />}
+                    {
+                        commentWindow &&
+                        <CommentBox openCommentWindow={openCommentWindow}/>
+                    }
                 </div>
 
             ) : (
