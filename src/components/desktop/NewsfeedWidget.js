@@ -196,9 +196,9 @@ const NewsfeedWidget = () => {
                             showConfirmWindow={showConfirmWindow}
                             //setProfileData={setProfileData}
                             userName={userInfoState.userInfo.userName}
-                        />}
-                    {
-                        commentWindow &&
+                        />
+                    }
+                    {commentWindow &&
                         <CommentBox openCommentWindow={openCommentWindow}/>
                     }
                 </div>
