@@ -14,6 +14,7 @@ const NewsfeedWidget = () => {
     const [confirmWindow, showConfirmWindow] = useState(false);
     const [userToUnfollow, setUserToUnfollow] = useState("");
     const [postInteractions, setPostInteractions] = useState([]);
+    const [likedPost, setLikedPost] = useState(false);
     const [commentWindow, openCommentWindow] = useState(false);
     const userInfoState = useSelector((state) => state.userInfo);
 
@@ -118,6 +119,12 @@ const NewsfeedWidget = () => {
     },[postInteractions]);
 
     const toggleLikePost = async (userName, url) => {
+        setLikedPost(true);
+
+        setTimeout(()=>{
+            console.log("Create heart animation...");
+            setLikedPost(false);
+        }, 2500);
         setPostInteractions(prev => {
                 const existingPost = prev.find(post => post.id === url && post.userId === userName);
                 console.log("Existing");
@@ -181,7 +188,7 @@ const NewsfeedWidget = () => {
                                 </div>
                                 <div className="flex">
                                     <div className="pl-4 pr-4 pb-4" onClick={() => toggleLikePost(item.userName, item.url)}>
-                                        <img src="/images/heart_icon.svg" className="h-4" alt="Like" />
+                                        <img src="/images/heart_icon.svg" className={`h-6 w-6 transition-transform duration-300 ${likedPost ? "text-red-600 scale-125 rotate-12" : "text-gray-400"}`} alt="Like" />
                                     </div>
                                     <div>
                                         <img src="/images/comment_icon.svg" className="h-4" alt="Comment" onClick={() => commentOnPost()}/>
