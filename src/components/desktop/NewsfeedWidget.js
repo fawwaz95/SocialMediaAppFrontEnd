@@ -15,6 +15,7 @@ const NewsfeedWidget = () => {
     const [userToUnfollow, setUserToUnfollow] = useState("");
     const [postInteractions, setPostInteractions] = useState([]);
     const [likedPost, setLikedPost] = useState(false);
+    const [likedPostBy, setLikedPostBy] = useState([]);
     const [commentWindow, openCommentWindow] = useState(false);
     const userInfoState = useSelector((state) => state.userInfo);
 
@@ -111,20 +112,18 @@ const NewsfeedWidget = () => {
     }
 
     useEffect(() => {
-        console.log("Check the postInteractions");
-        console.log(postInteractions);
+        console.log("Updated hook....likedPostBy");
+        console.log(likedPostBy);
+    },[likedPostBy]);
 
-        console.log("Are we back?");
-        
-    },[postInteractions]);
-
-    const toggleLikePost = async (userName, url) => {
+    /*const toggleLikePost = async (userName, url) => {
         setLikedPost(true);
 
         setTimeout(()=>{
             console.log("Create heart animation...");
             setLikedPost(false);
         }, 2500);
+        
         setPostInteractions(prev => {
                 const existingPost = prev.find(post => post.id === url && post.userId === userName);
                 console.log("Existing");
@@ -150,7 +149,49 @@ const NewsfeedWidget = () => {
                     ];
             }
         });
-    };
+    };*/
+
+    const toggleLikePost2 = async (url, userName) => {
+        //setLikedPost(true);
+
+        try {
+            const likedPost = {
+                url: url,
+                likedBy: userInfoState.userInfo.userName
+            }
+
+            const postMethod = {
+                method: "Post",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({likedPost}),
+            }
+
+            const response = await fetch("http://localhost:3001/routes/likedPost", postMethod);
+
+            if (!response.ok) {
+                console.error("Http error likedPost: " + response.status);
+            }
+
+            const jsonData = await response.json();
+
+            if (jsonData && jsonData.success === true) {
+                console.log("likedPost was successful!!!");
+                console.log(jsonData);
+            
+                //After successfull like....this should then get the likePosts and check if the current user has a post int he newsfeed that he clicked like on
+                //Then those images should have a red heart
+            } else {
+                console.log("Error in likedPost.............");
+                console.log(jsonData);
+            }
+            
+        }catch (error) {
+            console.error("Caught an error toggleLikePost2.......");
+            console.error(error.status + " " + error.message);
+        }
+    }
 
     const commentOnPost = async () => {
         console.log("commentOnPost invoked.... ");
@@ -187,11 +228,26 @@ const NewsfeedWidget = () => {
                                     <img src={item.url} className="pt-4 pb-4 max-h-96 max-w-full self-center" alt="Post" key={new Date()}/>
                                 </div>
                                 <div className="flex">
-                                    <div className="pl-4 pr-4 pb-4" onClick={() => toggleLikePost(item.userName, item.url)}>
-                                        <img src="/images/heart_icon.svg" className={`h-6 w-6 transition-transform duration-300 ${likedPost ? "text-red-600 scale-125 rotate-12" : "text-gray-400"}`} alt="Like" />
+                                    <div className="pl-4 pr-4 pb-4" onClick={() => toggleLikePost2(item.url, item.userName)}>
+                                        {/*{likedPostBy &&
+                                            likedPostBy.map((likePostByItems) => {
+                                                if (
+                                                    likePostByItems.url === item.url &&
+                                                    likePostByItems.likes.indexOf(userInfoState.userInfo.userName) !== -1
+                                                ) {
+                                                    return <img src="/images/heart_icon_temp.svg" className="h-4" alt="Liked" />;
+                                                } else {
+                                                    return <img src="/images/heart_white_icon.svg" className="h-4" alt="Not Liked" />;
+                                                }
+                                        })}*/}
+                                    <img
+                                        src={likedPost ? "/images/heart_icon_temp.svg" : "/images/heart_white_icon.svg"}
+                                        className="h-4 transition-transform duration-300 scale-125"
+                                        alt="Like"
+                                    />
                                     </div>
                                     <div>
-                                        <img src="/images/comment_icon.svg" className="h-4" alt="Comment" onClick={() => commentOnPost()}/>
+                                        <img src="/images/message_bubble_white_icon.svg" className="h-4" alt="Comment" onClick={() => commentOnPost()}/>
                                     </div>
                                 </div>
                             </div>
