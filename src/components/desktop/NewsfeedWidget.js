@@ -119,7 +119,7 @@ const NewsfeedWidget = () => {
       console.log("The result.......followFriend");
       console.log(result);
     } catch (error) {
-      console.error("Error following friend:", error);
+      console.error("Error following friend: ", error);
     }
   };
 
