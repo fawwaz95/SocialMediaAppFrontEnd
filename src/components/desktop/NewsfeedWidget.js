@@ -95,6 +95,33 @@ const NewsfeedWidget = () => {
     }
   };
 
+  const toggleUnLikePost = async (url) => { 
+    console.log("Lets unlike this post....");
+    console.log(url);
+    console.log(userInfoState.userInfo.userName);
+
+    try{
+        const response = await fetch(`http://localhost:3001/routes/unLikePost?url=${encodeURIComponent(url)}&userName=${userInfoState.userInfo.userName}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("SUCCESS");
+            console.log(data);
+            await fetchLikedPosts();
+        }else {
+            console.error("Error toggling unLike:", response.status);
+        }
+
+    }catch(error){
+        console.error("Error unliking post:", error);
+    }
+  }
+
   const followFriend = async (event, item) => {
     event.preventDefault();
     try {
@@ -185,7 +212,7 @@ const NewsfeedWidget = () => {
                 <div className="flex">
                   <div
                     className="pl-4 pr-4 pb-4"
-                    onClick={() => toggleLikePost(item.url)}
+                    
                   >
                     {allLikedPosts.some(
                       (likedPost) =>
@@ -198,12 +225,14 @@ const NewsfeedWidget = () => {
                         src="/images/heart_icon_temp.svg"
                         className="h-4"
                         alt="Liked"
+                        onClick={() => toggleUnLikePost(item.url)}
                       />
                     ) : (
                       <img
                         src="/images/heart_white_icon.svg"
                         className="h-4"
                         alt="Not Liked"
+                        onClick={() => toggleLikePost(item.url)}
                       />
                     )}
                   </div>
